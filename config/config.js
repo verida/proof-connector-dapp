@@ -1,0 +1,1 @@
+export const ZKPASS_APP_ID = process.env.NEXT_PUBLIC_ZKPASS_APP_ID || "";
