@@ -42,7 +42,7 @@ export default async function handler(req, res) {
       const type = "inbox/type/dataSend";
 
       const data = {
-        data: body.result,
+        data: body.msg,
       };
       const message = "ZkPass result";
 
