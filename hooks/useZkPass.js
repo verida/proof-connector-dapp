@@ -26,7 +26,7 @@ async function processZK(schemaId) {
 }
 
 async function sendMessage(veridaDid, msg) {
-  const res = await fetch("/api/verify", {
+  const res = await fetch("/api/send-message", {
     method: "POST",
     body: JSON.stringify({
       msg,
@@ -41,7 +41,7 @@ async function sendMessage(veridaDid, msg) {
   }
 }
 
-export const useVerify = () => {
+export const useZkPass = () => {
   const [zkStatus, setZkStatus] = useState(Status.None);
   const [msgStatus, setMsgStatus] = useState(Status.None);
 

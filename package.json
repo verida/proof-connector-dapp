@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reclaimprotocol/js-sdk": "^1.1.0",
     "@verida/account-node": "^3.0.2",
     "@verida/client-ts": "^3.0.3",
     "@zkpass/transgate-js-sdk": "^0.1.0",
