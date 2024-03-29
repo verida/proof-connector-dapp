@@ -13,7 +13,7 @@
     "@verida/account-node": "^3.0.2",
     "@verida/client-ts": "^3.0.3",
     "@zkpass/transgate-js-sdk": "^0.1.0",
-    "next": "12.3.4",
+    "next": "^14.1.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
