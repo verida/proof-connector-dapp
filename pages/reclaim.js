@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/router";
 import providers from "../config/reclaim-providers";
 import { useReclaim } from "../hooks/useReclaim";
