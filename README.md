@@ -1,34 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Verida Dapp connector 
 
-First, run the development server:
+This application directs a user to generate a zero knowledge proof (using [zkPass](https://zkpass.org/) or [Reclaim protocol](https://reclaimprotocol.org/)) of something on an external website. This proof is then sent to the user’s Verida Wallet using the Verida inbox messaging system.
 
-```bash
-npm run dev
-# or
-yarn dev
+## Usecase Examples
+- Verify if you exceed trading volume on Binance
+- Verify if you are discord owner
+- Verify if you have Uber account
+
+## Setup
+### Setup zkPass account
+- Follow [this](https://zkpass.gitbook.io/zkpass/developer-guides/quick-start) instructions 
+- Create new application and register necessary [schemas](https://zkpass.gitbook.io/zkpass/developer-guides/schema) .
+- Get `APP_ID`
+- In `src/config/zk-schema.js` update schemas with your own schemas.
+- Update `NEXT_PUBLIC_ZKPASS_APP_ID` in .env file.
+
+### Setup Reclaim account
+- Go to https://dev.reclaimprotocol.org/dashboard
+- Create new app and register necessary providers
+- In `src/reclaim-providers.js` update provider data with your own providers.
+- Update `NEXT_PUBLIC_RECLAIM_APP_ID` in .env file
+- Update `RECLAIM_SECRET_KEY` in .env file
+
+### Add private key to send message through Verida messaging system
+- Update `PRIVATE_KEY` in .env file.
+
+## Run
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+npm i
+npm run start
+```
+- Using zkPass
+```
+http://localhost:3000/zkpass?schemaId=[schemaId]&veridaDid=[veridaDid]
+Or
+http://localhost:3000/zkpass?veridaDid=[veridaDid]
+```
+- Using Reclaim
+```
+http://localhost:3000/reclaim?schemaId=[schemaId]&veridaDid=[veridaDid]
+Or
+http://localhost:3000/reclaim?veridaDid=[veridaDid]
+```
