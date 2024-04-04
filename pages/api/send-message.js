@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Client, Network } from "@verida/client-ts";
 import { EnvironmentType, Web3CallType } from "@verida/types";
 import { AutoAccount } from "@verida/account-node";
+import { generateVerifiableCredentials } from "../../hooks/utils";
 
 export default async function handler(req, res) {
   try {
@@ -38,6 +39,9 @@ export default async function handler(req, res) {
     });
 
     if (context) {
+      const credentials = await generateVerifiableCredentials(context, body.veridaDid);
+
+      console.log('crednetilas: ', credentials, body.msg)
       const messaging = await context?.getMessaging();
       const type = "inbox/type/dataSend";
 
@@ -58,6 +62,8 @@ export default async function handler(req, res) {
 
       console.log("Sent : ", result);
       res.status(200).json(result);
+    } else {
+      res.status(500).json("Cannot create Verida Context");
     }
   } catch (err) {
     console.log("Error while messaging: ", err);
