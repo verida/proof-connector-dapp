@@ -11,6 +11,7 @@ export default async function handler(req, res) {
     const VERIDA_ENVIRONMENT = EnvironmentType.TESTNET;
     const CONTEXT_NAME = "Dapp Connector";
     const PK = `0x${process.env.PRIVATE_KEY}`;
+    const VERIDA_SEED = process.env.VERIDA_SEED;
 
     // Configuration for the DID client
     // `privateKey` must be a Polygon private key that has enough
@@ -32,7 +33,7 @@ export default async function handler(req, res) {
         environment: VERIDA_ENVIRONMENT,
       },
       account: new AutoAccount({
-        privateKey: PK || "", // or Verida mnemonic seed phrase
+        privateKey: VERIDA_SEED, // or Verida mnemonic seed phrase
         environment: VERIDA_ENVIRONMENT,
         didClientConfig: DID_CLIENT_CONFIG,
       }),
@@ -69,4 +70,6 @@ export default async function handler(req, res) {
     console.log("Error while messaging: ", err);
     res.status(500).json(err);
   }
+
+  await context.close()
 }
