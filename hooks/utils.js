@@ -1,5 +1,5 @@
 import Credentials from "@verida/verifiable-credentials";
-export const generateVerifiableCredentials = async (context, veridaDid) => {
+export const generateVerifiableCredentials = async (context, veridaDid, data) => {
   // Note: `context` should already be obtained by connecting to the Verida Network
   const credentialSDK = new Credentials();
 
@@ -11,19 +11,10 @@ export const generateVerifiableCredentials = async (context, veridaDid) => {
 
   // Data for the credential that matches the credential schema
   const credentialData = {
-    finClusiveId: "12345",
-    gender: "male",
-    firstName: "Chris",
-    lastName: "Tester",
-    streetAddress1: "123 Four Ave",
-    suburb: "Adelaide",
-    state: "SA",
-    postcode: "5000",
-    dateOfBirth: "2000-01-01",
+    ...data,
+    did: veridaDid,
   };
 
-  const title = "KYC Credential";
-  const summary = "Credential issued by <signer> on <date>";
   const options = {};
   try {
     const credentialRecord = await credentialSDK.createVerifiableCredentialRecord(
@@ -32,10 +23,7 @@ export const generateVerifiableCredentials = async (context, veridaDid) => {
         data: credentialData,
         subjectId: veridaDid,
         schema: credentialSchema,
-        options,
       },
-      title,
-      summary
     );
     return credentialRecord;;
   } catch (err) {

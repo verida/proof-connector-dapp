@@ -13,6 +13,8 @@ export default async function handler(req, res) {
     const PK = `0x${process.env.PRIVATE_KEY}`;
     const VERIDA_SEED = process.env.VERIDA_SEED;
 
+    console.log('data: ', body.msg);
+
     // Configuration for the DID client
     // `privateKey` must be a Polygon private key that has enough
     // MATIC to perform a blockchain transaction to create your DID
@@ -40,21 +42,22 @@ export default async function handler(req, res) {
     });
 
     if (context) {
-      const credentials = await generateVerifiableCredentials(context, body.veridaDid);
+      const credentials = await generateVerifiableCredentials(
+        context,
+        body.veridaDid,
+        body.msg
+      );
 
-      console.log('crednetilas: ', credentials, body.msg)
+      console.log("credentials: ", credentials);
       const messaging = await context?.getMessaging();
       const type = "inbox/type/dataSend";
 
-      const data = {
-        data: body.msg,
-      };
-      const message = "ZkPass result";
+      const message = "zkPass result";
 
       const result = await messaging?.send(
         body.veridaDid,
         type,
-        data,
+        credentials,
         message,
         {
           did: body.veridaDid,
@@ -63,6 +66,7 @@ export default async function handler(req, res) {
 
       console.log("Sent : ", result);
       res.status(200).json(result);
+      await context.close();
     } else {
       res.status(500).json("Cannot create Verida Context");
     }
@@ -70,6 +74,4 @@ export default async function handler(req, res) {
     console.log("Error while messaging: ", err);
     res.status(500).json(err);
   }
-
-  await context.close()
 }
