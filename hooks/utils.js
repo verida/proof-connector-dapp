@@ -1,4 +1,4 @@
-import Credentials from "@verida/verifiable-credentials";
+import { Credentials } from "@verida/verifiable-credentials";
 export const generateVerifiableCredentials = async (context, veridaDid, data) => {
   // Note: `context` should already be obtained by connecting to the Verida Network
   const credentialSDK = new Credentials();
@@ -13,9 +13,10 @@ export const generateVerifiableCredentials = async (context, veridaDid, data) =>
   const credentialData = {
     ...data,
     did: veridaDid,
+    schema: credentialSchema
   };
 
-  const options = {};
+  console.log('formated_data: ', credentialData)
   try {
     const credentialRecord = await credentialSDK.createVerifiableCredentialRecord(
       {
@@ -24,10 +25,12 @@ export const generateVerifiableCredentials = async (context, veridaDid, data) =>
         subjectId: veridaDid,
         schema: credentialSchema,
       },
+      "zkPass credentials", // name
+      "zkPass verifiable credentials", // summary
     );
     return credentialRecord;;
   } catch (err) {
     console.log("error while generating credentials: ", err);
-    return {};
+    return null;
   }
 };

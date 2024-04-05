@@ -2,6 +2,7 @@
 import TransgateConnect from "@zkpass/transgate-js-sdk";
 import { ZKPASS_APP_ID } from "../config/config";
 import { useState } from "react";
+import { schemas } from "../config/zk-schemas";
 
 export const Status = {
   None: 0,
@@ -62,7 +63,11 @@ export const useZkPass = () => {
     if (msg) {
       try {
         setMsgStatus(Status.Processing);
-        await sendMessage(veridaDid, msg);
+        await sendMessage(veridaDid, {
+          ...msg,
+          zkPassSchemaId: schemaId,
+          zkPassSchemaLabel: schemas.find(item => item.id === schemaId)?.title || "No label"
+        });
         setMsgStatus(Status.Success);
       } catch (err) {
         console.log("Verida Message error: ", err);
