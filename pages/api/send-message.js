@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const PK = `0x${process.env.PRIVATE_KEY}`;
     const VERIDA_SEED = process.env.VERIDA_SEED;
 
-    console.log('data: ', body.msg, VERIDA_SEED);
+    console.log("data: ", body.msg, VERIDA_SEED);
 
     // Configuration for the DID client
     // `privateKey` must be a Polygon private key that has enough
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         res.status(500).json("Cannot create Verida credentials");
         return;
       }
-      
+
       const messaging = await context?.getMessaging();
       const type = "inbox/type/dataSend";
 
@@ -62,11 +62,11 @@ export default async function handler(req, res) {
       const result = await messaging?.send(
         body.veridaDid,
         type,
-        credentials,
+        { data: [credentials] },
         message,
         {
           did: body.veridaDid,
-          recipientContextName: 'Verida: Vault'
+          recipientContextName: "Verida: Vault",
         }
       );
 
