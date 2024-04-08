@@ -5,6 +5,11 @@ import { schemas } from "../config/zk-schemas";
 import { useRouter } from "next/router";
 import TransgateConnect from "@zkpass/transgate-js-sdk";
 import { ZKPASS_APP_ID } from "../config/config";
+import { Sora } from "next/font/google";
+import { Header } from "../components/layouts/header";
+import { Footer } from "../components/layouts/Footer";
+
+const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 
 export default function ZkPassView() {
   const { verify, zkStatus, msgStatus } = useZkPass();
@@ -57,23 +62,20 @@ export default function ZkPassView() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className={`flex min-h-screen flex-col ${sora.className}`}>
+      <Header
+        handleClick={handleClick}
+        title={zkStatus === Status.Processing ? "Processing..." : "Continue"}
+        disabled={
+          !schemaId ||
+          zkStatus === Status.Processing ||
+          msgStatus === Status.Processing
+        }
+      />
       <div
-        className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm flex-col"
-        style={{ padding: "30px" }}
+        className={`z-10 max-w-5xl w-full items-center mx-auto justify-between flex-col text-white pt-10`}
       >
-        <button
-          className="border-1 p-3 cursor-pointer"
-          onClick={handleClick}
-          disabled={
-            !schemaId ||
-            zkStatus === Status.Processing ||
-            msgStatus === Status.Processing
-          }
-        >
-          {zkStatus === Status.Processing ? "Processing..." : "Verify"}
-        </button>
-        {!schemaId && <p>Select schema to verify</p>}
+        <h3 className="text-[32px] text-center w-full mb-5">Verida Dapp Connector</h3>
         {zkStatus === Status.Processing && (
           <p>Waiting you to complete ZK verification...</p>
         )}
@@ -98,12 +100,11 @@ export default function ZkPassView() {
             <ul className="">
               {schemas.map((schema) => (
                 <li
-                  className={`mb-4 p-3 rounded-md cursor-pointer ${
-                    schema.id == schemaId ? "bg-slate-500" : ""
+                  className={`p-3 rounded-md cursor-pointer flex gap-3 ${
+                    schema.id == schemaId ? "bg-indigo-500" : ""
                   }`}
                   key={schema.id}
                   onClick={() => handleSchemaSelect(schema.id)}
-                  style={{ display: "flex", gap: "15px" }}
                 >
                   <input
                     type="radio"
@@ -111,8 +112,8 @@ export default function ZkPassView() {
                     readOnly
                   />
                   <div>
-                    <h3 className="text-[14px] text-black">{schema.title}</h3>
-                    <p className="text-[12px] text-blue-900">
+                    <h3 className="text-[14px] text-white">{schema.title}</h3>
+                    <p className="text-[12px] text-white">
                       {schema.description}
                     </p>
                   </div>
@@ -122,6 +123,7 @@ export default function ZkPassView() {
           </div>
         )}
       </div>
+      <Footer />
     </main>
   );
 }

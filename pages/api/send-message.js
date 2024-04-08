@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   try {
     const body = JSON.parse(req.body);
     // Create a connection to the network and open your context
-    const VERIDA_ENVIRONMENT = EnvironmentType.TESTNET;
+    const VERIDA_ENVIRONMENT = process.env.IS_DEV === "true" ? EnvironmentType.TESTNET : EnvironmentType.MAINNET;
     const CONTEXT_NAME = "Dapp Connector";
     const PK = `0x${process.env.PRIVATE_KEY}`;
     const VERIDA_SEED = process.env.VERIDA_SEED;
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
       const messaging = await context?.getMessaging();
       const type = "inbox/type/dataSend";
 
-      const message = "zkPass result";
+      const message = "zkPass result mainnet";
 
       const result = await messaging?.send(
         body.veridaDid,
