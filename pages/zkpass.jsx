@@ -8,12 +8,14 @@ import { ZKPASS_APP_ID } from "../config/config";
 import { Sora } from "next/font/google";
 import { Header } from "../components/layouts/header";
 import { Footer } from "../components/layouts/Footer";
+import VerificationModal from "../components/layouts/VerificationModal";
 
 const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 
 export default function ZkPassView() {
   const { verify, zkStatus, msgStatus } = useZkPass();
   const [zkAvailable, setZkAvailable] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const router = useRouter();
   const _schemaId = router.query.schemaId;
@@ -59,6 +61,11 @@ export default function ZkPassView() {
 
   const handleSchemaSelect = (_schemaId) => {
     setSchemaId(_schemaId);
+    setModalOpen(true);
+  };
+
+  const handleModalClosed = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -75,7 +82,9 @@ export default function ZkPassView() {
       <div
         className={`z-10 max-w-5xl w-full items-center mx-auto justify-between flex-col text-white pt-10`}
       >
-        <h3 className="text-[32px] text-center w-full mb-5">Verida Dapp Connector</h3>
+        <h3 className="text-[32px] text-center w-full mb-5">
+          Verida Dapp Connector
+        </h3>
         {zkStatus === Status.Processing && (
           <p>Waiting you to complete ZK verification...</p>
         )}
@@ -123,6 +132,18 @@ export default function ZkPassView() {
           </div>
         )}
       </div>
+      {schemaId && (
+        <VerificationModal
+          isOpen={isModalOpen}
+          onClose={handleModalClosed}
+          handleBtnClick={handleClick}
+          verifier={"zkPass"}
+          schema={schemas.find((item) => item.id == schemaId)}
+          zkStatus={zkStatus}
+          msgStatus={msgStatus} 
+        />
+      )}
+
       <Footer />
     </main>
   );
