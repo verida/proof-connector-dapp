@@ -9,7 +9,16 @@ import { useEffect, useState } from "react";
 
 const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 
-const VerificationModal = ({
+interface Props {
+  isOpen: boolean,
+  onClose: React.Dispatch<void>,
+  handleBtnClick: React.Dispatch<void>,
+  verifier: string,
+  schema: any,
+  zkStatus: number,
+  msgStatus: number
+}
+const VerificationModal: React.FC<Props> = ({
   isOpen,
   onClose,
   handleBtnClick,
@@ -40,11 +49,11 @@ const VerificationModal = ({
         sora.className
       )}
     >
-      <div className="absolute inset-0" onClick={onClose} />
+      <div className="absolute inset-0" onClick={() => onClose()} />
       <div className="relative z-10 w-full max-w-md space-y-4 rounded-xl bg-white p-4">
         <div className="modal-header flex justify-between w-full">
-          <Icon icon={"ep:back"} className="text-[24px] cursor-pointer" onClick={onClose}/>
-          <Icon icon={"iconoir:xmark"} className="text-[24px] cursor-pointer" onClick={onClose}/>
+          <Icon icon={"ep:back"} className="text-[24px] cursor-pointer" onClick={() => onClose()}/>
+          <Icon icon={"iconoir:xmark"} className="text-[24px] cursor-pointer" onClick={() => onClose()}/>
         </div>
         <div className="modal-body text-center">
           <div className="logo-wrapper flex justify-center">

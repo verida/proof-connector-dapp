@@ -4,13 +4,13 @@ import providers from "../config/reclaim-providers";
 import { useReclaim } from "../hooks/useReclaim";
 import { useEffect, useState } from "react";
 
-export default function ReclaimView() {
+const ReclaimView: React.FC<{}> = () => {
   const router = useRouter();
-  const _schemaId = router.query.schemaId;
-  const _veridaDid = router.query.veridaDid;
+  const _schemaId = router.query.schemaId as string;
+  const _veridaDid = router.query.veridaDid as string;
 
-  const [schemaId, setSchemaId] = useState(_schemaId || "");
-  const [veridaDid, setVeridaDid] = useState(_veridaDid || "");
+  const [schemaId, setSchemaId] = useState<string>(_schemaId || "");
+  const [veridaDid, setVeridaDid] = useState<string>(_veridaDid || "");
 
   useEffect(() => {
     setSchemaId(_schemaId);
@@ -70,3 +70,5 @@ export default function ReclaimView() {
     </div>
   );
 }
+
+export default ReclaimView;

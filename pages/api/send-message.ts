@@ -3,8 +3,9 @@ import { Client, Network } from "@verida/client-ts";
 import { EnvironmentType, Web3CallType } from "@verida/types";
 import { AutoAccount } from "@verida/account-node";
 import { generateVerifiableCredentials } from "../../hooks/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const body = JSON.parse(req.body);
     // Create a connection to the network and open your context
@@ -20,7 +21,7 @@ export default async function handler(req, res) {
     // MATIC to perform a blockchain transaction to create your DID
     // (If it doesn't exist)
     const DID_CLIENT_CONFIG = {
-      callType: "web3",
+      callType: "web3" as Web3CallType,
       web3Config: {
         // Polygon private key
         privateKey: PK,

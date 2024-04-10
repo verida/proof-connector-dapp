@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { RECLAIM_APP_ID } from "../config/config";
-import { Reclaim } from "@reclaimprotocol/js-sdk";
 
-export const useReclaim = (provider_id) => {
-  const reclaimClient = new Reclaim.ProofRequest(RECLAIM_APP_ID);
-  const [requestUrl, setRequestUrl] = useState("");
-  const [statusUrl, setStatusUrl] = useState("");
+export const useReclaim = (provider_id: string) => {
+  const [requestUrl, setRequestUrl] = useState<string>("");
+  const [statusUrl, setStatusUrl] = useState<string>("");
 
-  const [statusTxt, setStatusTxt] = useState("");
-  let intervalId;
+  const [statusTxt, setStatusTxt] = useState<string>("");
+  let intervalId: NodeJS.Timer;
 
   useEffect(() => {
     (async () => {
@@ -33,7 +31,7 @@ export const useReclaim = (provider_id) => {
     })();
   }, [provider_id]);
 
-  async function sendMessage(veridaDid, msg) {
+  async function sendMessage(veridaDid: string, msg: any) {
     const res = await fetch("/api/send-message", {
       method: "POST",
       body: JSON.stringify({
@@ -50,7 +48,7 @@ export const useReclaim = (provider_id) => {
   }
 
   const startVerification = useCallback(
-    (veridaDid) => {
+    (veridaDid: string) => {
       clearInterval(intervalId);
       if (statusUrl) {
         intervalId = setInterval(async () => {
@@ -68,7 +66,7 @@ export const useReclaim = (provider_id) => {
                   "Generated proof. Sending message to verida app..."
                 );
 
-                if (msg) {
+                if (context) {
                   try {
                     await sendMessage(veridaDid, context);
                     setStatusTxt("Message sent!");

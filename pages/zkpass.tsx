@@ -6,23 +6,23 @@ import { useRouter } from "next/router";
 import TransgateConnect from "@zkpass/transgate-js-sdk";
 import { ZKPASS_APP_ID } from "../config/config";
 import { Sora } from "next/font/google";
-import { Header } from "../components/layouts/header";
+import { Header } from "../components/layouts/Header";
 import { Footer } from "../components/layouts/Footer";
 import VerificationModal from "../components/layouts/VerificationModal";
 
 const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 
-export default function ZkPassView() {
+const ZkPassView: React.FC<{}> = () => {
   const { verify, zkStatus, msgStatus } = useZkPass();
-  const [zkAvailable, setZkAvailable] = useState(false);
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [zkAvailable, setZkAvailable] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   const router = useRouter();
-  const _schemaId = router.query.schemaId;
-  const _veridaDid = router.query.veridaDid;
+  const _schemaId = router.query.schemaId as string;
+  const _veridaDid = router.query.veridaDid as string;
 
-  const [schemaId, setSchemaId] = useState(_schemaId || "");
-  const [veridaDid, setVeridaDid] = useState(_veridaDid || "");
+  const [schemaId, setSchemaId] = useState<string>(_schemaId || "");
+  const [veridaDid, setVeridaDid] = useState<string>(_veridaDid || "");
 
   useEffect(() => {
     setSchemaId(_schemaId);
@@ -148,3 +148,5 @@ export default function ZkPassView() {
     </main>
   );
 }
+
+export default ZkPassView;
