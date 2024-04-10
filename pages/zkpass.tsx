@@ -132,6 +132,7 @@ const ZkPassView: React.FC<{}> = () => {
           </div>
         )}
       </div>
+      <Footer />
       {schemaId && (
         <VerificationModal
           isOpen={isModalOpen}
@@ -144,7 +145,6 @@ const ZkPassView: React.FC<{}> = () => {
         />
       )}
 
-      <Footer />
     </main>
   );
 }
