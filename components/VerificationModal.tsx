@@ -1,10 +1,10 @@
 "use client";
 
 import cx from "classnames";
-import { ModalButton } from "../ModalButton";
+import { ModalButton } from "./ModalButton";
 import { Icon } from "@iconify/react";
 import { Sora } from "next/font/google";
-import { Status } from "../../hooks/useZkPass";
+import { Status } from "../hooks/useZkPass";
 import { useEffect, useState } from "react";
 
 const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });

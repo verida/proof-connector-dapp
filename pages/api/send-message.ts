@@ -8,13 +8,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const body = JSON.parse(req.body);
+    const {msg, veridaDid, schema} = body;
     // Create a connection to the network and open your context
     const VERIDA_ENVIRONMENT = process.env.IS_DEV === "true" ? EnvironmentType.TESTNET : EnvironmentType.MAINNET;
     const CONTEXT_NAME = "Dapp Connector";
     const PK = `0x${process.env.PRIVATE_KEY}`;
     const VERIDA_SEED = process.env.VERIDA_SEED;
-
-    console.log("data: ", body.msg);
 
     // Configuration for the DID client
     // `privateKey` must be a Polygon private key that has enough
@@ -45,8 +44,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (context) {
       const credentials = await generateVerifiableCredentials(
         context,
-        body.veridaDid,
-        body.msg
+        veridaDid,
+        msg,
+        schema
       );
 
       console.log("credentials: ", credentials);
@@ -58,15 +58,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const messaging = await context?.getMessaging();
       const type = "inbox/type/dataSend";
 
-      const message = "zkPass result mainnet";
+      const message = `zkPass credential: ${schema.host}`;
 
       const result = await messaging?.send(
-        body.veridaDid,
+        veridaDid,
         type,
         { data: [credentials] },
         message,
         {
-          did: body.veridaDid,
+          did: veridaDid,
           recipientContextName: "Verida: Vault",
         }
       );

@@ -1,13 +1,14 @@
 "use client";
 import { useRouter } from "next/router";
-import providers from "../config/reclaim-providers";
 import { useReclaim } from "../hooks/useReclaim";
 import { useEffect, useState } from "react";
 import { Sora } from "next/font/google";
 import { Header } from "../components/layouts/Header";
 import { Status } from "../hooks/useZkPass";
 import { Footer } from "../components/layouts/Footer";
-import VerificationModal from "../components/layouts/VerificationModal";
+import VerificationModal from "../components/VerificationModal";
+import { schemas } from "../config/providers";
+import { Schema } from "../@types";
 const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 
 const ReclaimView: React.FC<{}> = () => {
@@ -15,12 +16,12 @@ const ReclaimView: React.FC<{}> = () => {
   const _schemaId = router.query.schemaId as string;
   const _veridaDid = router.query.veridaDid as string;
 
-  const [schemaId, setSchemaId] = useState<string>(_schemaId || "");
+  const [schema, setSchema] = useState<Schema>();
   const [veridaDid, setVeridaDid] = useState<string>(_veridaDid || "");
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    setSchemaId(_schemaId);
+    setSchema(schemas.find((item) => item.id == _schemaId));
     setVeridaDid(_veridaDid);
 
     if (_schemaId) {
@@ -29,17 +30,17 @@ const ReclaimView: React.FC<{}> = () => {
   }, [_schemaId, _veridaDid]);
 
   const handleClick = () => {
-    if ((!schemaId || !veridaDid) && (!_veridaDid || !_schemaId)) {
+    if ((!schema || !veridaDid) && (!_veridaDid || !_schemaId)) {
       alert("SchemaId or VeridaDid is missing");
       return;
     }
 
     window.open(requestUrl, "_blank");
-    startVerification(veridaDid);
+    startVerification(veridaDid, schema);
   };
 
   const handleSchemaSelect = (_schemaId) => {
-    setSchemaId(_schemaId);
+    setSchema(_schemaId);
     setModalOpen(true);
   };
 
@@ -47,7 +48,7 @@ const ReclaimView: React.FC<{}> = () => {
     setModalOpen(false);
   };
   const { requestUrl, startVerification, statusTxt, zkStatus, msgStatus } =
-    useReclaim(schemaId);
+    useReclaim(schema);
 
   return (
     <main className={`flex min-h-screen flex-col ${sora.className}`}>
@@ -55,7 +56,7 @@ const ReclaimView: React.FC<{}> = () => {
         handleClick={handleClick}
         title={zkStatus === Status.Processing ? "Processing..." : "Continue"}
         disabled={
-          !schemaId ||
+          !schema ||
           zkStatus === Status.Processing ||
           msgStatus === Status.Processing
         }
@@ -70,24 +71,24 @@ const ReclaimView: React.FC<{}> = () => {
         {!_schemaId && (
           <div className="schemas">
             <ul className="">
-              {providers.map((schema) => (
+              {schemas.map((_schema) => (
                 <li
                   className={`mb-4 p-3 rounded-md cursor-pointer ${
-                    schema.id == schemaId ? "bg-slate-500" : ""
+                    _schema.id == schema.id ? "bg-slate-500" : ""
                   }`}
-                  key={schema.id}
-                  onClick={() => handleSchemaSelect(schema.id)}
+                  key={_schema.id}
+                  onClick={() => handleSchemaSelect(_schema.id)}
                   style={{ display: "flex", gap: "15px" }}
                 >
                   <input
                     type="radio"
-                    checked={schema.id === schemaId}
+                    checked={_schema.id === schema.id}
                     readOnly
                   />
                   <div>
-                    <h3 className="text-[14px] text-white">{schema.title}</h3>
+                    <h3 className="text-[14px] text-white">{_schema.title}</h3>
                     <p className="text-[12px] text-white">
-                      {schema.description}
+                      {_schema.description}
                     </p>
                   </div>
                 </li>
@@ -97,13 +98,13 @@ const ReclaimView: React.FC<{}> = () => {
         )}
       </div>
       <Footer />
-      {schemaId && (
+      {schema && (
         <VerificationModal
           isOpen={isModalOpen}
           onClose={handleModalClosed}
           handleBtnClick={handleClick}
           verifier={"Reclaim"}
-          schema={providers.find((item) => item.id == schemaId)}
+          schema={schema}
           zkStatus={zkStatus}
           msgStatus={msgStatus}
         />
