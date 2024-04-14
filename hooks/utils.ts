@@ -1,7 +1,7 @@
 import { Credentials } from "@verida/verifiable-credentials";
-import { Schema } from "../@types";
+import { Schema, ZkPassResult } from "../@types";
 import { Context } from "@verida/client-ts";
-export const generateVerifiableCredentials = async (context: Context, veridaDid: string, data: any, schema: Schema) => {
+export const generateVerifiableCredentials = async (context: Context, veridaDid: string, data: ZkPassResult, schema: Schema) => {
   // Note: `context` should already be obtained by connecting to the Verida Network
   const credentialSDK = new Credentials();
 

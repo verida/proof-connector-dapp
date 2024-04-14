@@ -12,7 +12,7 @@ const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 interface Props {
   isOpen: boolean;
   onClose: React.Dispatch<void>;
-  handleItemClick: React.Dispatch<any>;
+  handleItemClick: React.Dispatch<Schema>;
   data: Schema[];
 }
 

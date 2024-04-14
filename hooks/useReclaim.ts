@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { RECLAIM_APP_ID } from "../config/config";
 import { Status } from "./useZkPass";
-import { Schema } from "../@types";
+import { Schema, ZkPassResult } from "../@types";
 
 export const useReclaim = (schema: Schema) => {
   const [requestUrl, setRequestUrl] = useState<string>("");
@@ -37,7 +37,7 @@ export const useReclaim = (schema: Schema) => {
     })();
   }, [schema]);
 
-  async function sendMessage(veridaDid: string, msg: any, schema: Schema) {
+  async function sendMessage(veridaDid: string, msg: ZkPassResult, schema: Schema) {
     const res = await fetch("/api/send-message", {
       method: "POST",
       body: JSON.stringify({

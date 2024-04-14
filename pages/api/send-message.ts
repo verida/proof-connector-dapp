@@ -5,12 +5,18 @@ import { AutoAccount } from "@verida/account-node";
 import { generateVerifiableCredentials } from "../../hooks/utils";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const body = JSON.parse(req.body);
-    const {msg, veridaDid, schema} = body;
+    const { msg, veridaDid, schema } = body;
     // Create a connection to the network and open your context
-    const VERIDA_ENVIRONMENT = process.env.IS_DEV === "true" ? EnvironmentType.TESTNET : EnvironmentType.MAINNET;
+    const VERIDA_ENVIRONMENT =
+      process.env.IS_DEV === "true"
+        ? EnvironmentType.TESTNET
+        : EnvironmentType.MAINNET;
     const CONTEXT_NAME = "Dapp Connector";
     const PK = `0x${process.env.PRIVATE_KEY}`;
     const VERIDA_SEED = process.env.VERIDA_SEED;

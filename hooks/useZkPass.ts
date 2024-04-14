@@ -3,7 +3,7 @@ import TransgateConnect from "@zkpass/transgate-js-sdk";
 import { ZKPASS_APP_ID } from "../config/config";
 import { useState } from "react";
 import { schemas } from "../config/providers";
-import { Schema } from "../@types";
+import { Schema, ZkPassResult } from "../@types";
 
 export const Status = {
   None: 0,
@@ -12,7 +12,7 @@ export const Status = {
   Failed: 3,
 };
 
-async function processZK(schemaId: string) {
+async function processZK(schemaId: string): Promise<ZkPassResult> {
   // Create the connector instance
   const connector = new TransgateConnect(ZKPASS_APP_ID);
   // Check if the TransGate extension is installed
@@ -21,13 +21,13 @@ async function processZK(schemaId: string) {
   if (isAvailable) {
     const res = await connector.launch(schemaId);
 
-    return res;
+    return res as ZkPassResult;
   } else {
     throw new Error("You need to install ZKPass extension");
   }
 }
 
-async function sendMessage(veridaDid: string, msg: any, schema: Schema) {
+async function sendMessage(veridaDid: string, msg: ZkPassResult, schema: Schema) {
   const res = await fetch("/api/send-message", {
     method: "POST",
     body: JSON.stringify({
@@ -52,7 +52,7 @@ export const useZkPass = () => {
     setZkStatus(Status.None);
     setMsgStatus(Status.None);
 
-    let msg: any = undefined;
+    let msg: ZkPassResult;
     try {
       setZkStatus(Status.Processing);
       msg = await processZK(schema.id);
