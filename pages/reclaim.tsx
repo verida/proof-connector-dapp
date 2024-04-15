@@ -103,7 +103,6 @@ const ReclaimView: React.FC<{}> = () => {
           isOpen={isModalOpen}
           onClose={handleModalClosed}
           handleBtnClick={handleClick}
-          verifier={"Reclaim"}
           schema={schema}
           zkStatus={zkStatus}
           msgStatus={msgStatus}

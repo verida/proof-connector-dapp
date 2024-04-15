@@ -14,7 +14,6 @@ interface Props {
   isOpen: boolean;
   onClose: React.Dispatch<void>;
   handleBtnClick: React.Dispatch<void>;
-  verifier: string;
   schema: Schema;
   zkStatus: number;
   msgStatus: number;
@@ -23,7 +22,6 @@ const VerificationModal: React.FC<Props> = ({
   isOpen,
   onClose,
   handleBtnClick,
-  verifier,
   schema,
   zkStatus,
   msgStatus,
@@ -68,7 +66,7 @@ const VerificationModal: React.FC<Props> = ({
           <div className="logo-wrapper flex justify-center">
             <img
               src={`/imgs/${
-                verifier === "zkPass" ? "zkPass.png" : "reclaim.png"
+                schema.src === "zkPass" ? "zkPass.png" : "reclaim.png"
               }`}
               alt={schema.host}
               className="p-[2px] rounded-full bg-white w-14 h-14"
@@ -94,12 +92,12 @@ const VerificationModal: React.FC<Props> = ({
             <div className="flex items-center">
               <img
                 src={`/imgs/${
-                  verifier === "zkPass" ? "zkPass.png" : "reclaim.png"
+                  schema.src === "zkPass" ? "zkPass.png" : "reclaim.png"
                 }`}
                 alt={schema.host}
                 className="p-[2px] rounded-full bg-white w-[24px] h-[24px]"
               />
-              <span className="">{verifier}</span>
+              <span className="">{schema.src}</span>
             </div>
           </div>
         </div>

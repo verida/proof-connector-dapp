@@ -15,7 +15,7 @@ export const useReclaim = (schema: Schema) => {
 
   useEffect(() => {
     (async () => {
-      if (!schema) return;
+      if (!schema || schema.src !== "reclaim") return;
       setStatusTxt("Generating verification link");
       const res = await fetch("/api/reclaim-verification", {
         method: "POST",
@@ -37,13 +37,17 @@ export const useReclaim = (schema: Schema) => {
     })();
   }, [schema]);
 
-  async function sendMessage(veridaDid: string, msg: ZkPassResult, schema: Schema) {
+  async function sendMessage(
+    veridaDid: string,
+    msg: ZkPassResult,
+    schema: Schema
+  ) {
     const res = await fetch("/api/send-message", {
       method: "POST",
       body: JSON.stringify({
         msg,
         veridaDid,
-        schema
+        schema,
       }),
     });
 
@@ -104,5 +108,12 @@ export const useReclaim = (schema: Schema) => {
     [statusUrl, requestUrl]
   );
 
-  return { requestUrl, statusUrl, startVerification, statusTxt, zkStatus, msgStatus };
+  return {
+    requestUrl,
+    statusUrl,
+    startVerification,
+    statusTxt,
+    zkStatus,
+    msgStatus,
+  };
 };

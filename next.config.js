@@ -5,7 +5,7 @@ const nextConfig = {
   redirects: () => {
     return [{
       source: '/',
-      destination: '/zkpass',
+      destination: '/add-credential',
       permanent: true
     }]
   }

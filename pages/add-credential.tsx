@@ -6,18 +6,14 @@ import { useRouter } from "next/router";
 import TransgateConnect from "@zkpass/transgate-js-sdk";
 import { ZKPASS_APP_ID } from "../config/config";
 import { Sora } from "next/font/google";
-import { Header } from "../components/layouts/Header";
-import { Footer } from "../components/layouts/Footer";
 import VerificationModal from "../components/VerificationModal";
 import { ProviderSelectionModal } from "../components/ProviderSelectionModal";
 import { Schema } from "../@types";
+import { useReclaim } from "../hooks/useReclaim";
 
 const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 
-const ZkPassView: React.FC<{}> = () => {
-  const { verify, zkStatus, msgStatus } = useZkPass();
-  const [zkAvailable, setZkAvailable] = useState<boolean>(false);
-
+const AddCredential: React.FC<{}> = () => {
   const [isVerificationModalOpen, setVerificationModalOpen] =
     useState<boolean>(false);
   const [isProviderModalOpen, setProviderModalOpen] = useState<boolean>(true);
@@ -29,40 +25,66 @@ const ZkPassView: React.FC<{}> = () => {
   const [schema, setSchema] = useState<Schema>();
   const [veridaDid, setVeridaDid] = useState<string>(_veridaDid || "");
 
+  const { verify, zkStatus, msgStatus } = useZkPass();
+  const {
+    requestUrl,
+    startVerification,
+    statusTxt,
+    zkStatus: reclaimZkStatus,
+    msgStatus: reclaimMsgStatus,
+  } = useReclaim(schema);
+
   useEffect(() => {
-    setSchema(schemas.find((item) => item.id == _schemaId));
+    const _schema = schemas.find((item) => item.id == _schemaId);
+    setSchema(_schema);
     setVeridaDid(_veridaDid);
 
-    if (_schemaId) {
-      handleClick();
+    if (_schemaId && _veridaDid) {
+      handleClick(_schema, _veridaDid);
+      setVerificationModalOpen(true);
     }
   }, [_schemaId, _veridaDid]);
 
-  useEffect(() => {
-    (async () => {
+  const checkZkAvailable = async (schema: Schema) => {
+    if (!schema) return;
+    if (schema.src === "zkPass") {
       const connector = new TransgateConnect(ZKPASS_APP_ID);
       // Check if the TransGate extension is installed
       // If it returns false, please prompt to install it from chrome web store
       const isAvailable = await connector.isTransgateAvailable();
-      setZkAvailable(isAvailable);
-    })();
-  }, []);
-
-  const handleClick = useCallback(() => {
-    if ((!schema || !veridaDid) && (!_veridaDid || !_schemaId)) {
-      alert("SchemaId or VeridaDid is missing");
-      return;
+      return isAvailable;
+    } else {
+      return requestUrl ? true : false;
     }
+  };
 
-    if (!zkAvailable) {
-      alert("You need to install TransGate extension");
-      return;
-    }
+  const handleClick = useCallback(
+    (schema: Schema, veridaDid: string) => {
+      if (!schema || !veridaDid) {
+        alert("SchemaId or VeridaDid is missing");
+        return;
+      }
 
-    if (verify) {
-      verify(schema, veridaDid);
-    }
-  }, [verify, schema, veridaDid]);
+      if (!checkZkAvailable(schema)) {
+        if (schema.src === "zkPass") {
+          alert("You need to install TransGate extension");
+          return;
+        } else {
+          if (!requestUrl) return;
+        }
+      }
+
+      if (schema.src === "zkPass") {
+        if (verify) {
+          verify(schema, veridaDid);
+        }
+      } else {
+        window.open(requestUrl, "_blank");
+        startVerification(veridaDid, schema);
+      }
+    },
+    [verify, schema, veridaDid]
+  );
 
   const handleSchemaSelect = (schema: Schema) => {
     setSchema(schema);
@@ -90,14 +112,14 @@ const ZkPassView: React.FC<{}> = () => {
         <VerificationModal
           isOpen={isVerificationModalOpen}
           onClose={handleModalClosed}
-          handleBtnClick={handleClick}
+          handleBtnClick={() => handleClick(schema, veridaDid)}
           schema={schema}
-          zkStatus={zkStatus}
-          msgStatus={msgStatus}
+          zkStatus={schema.src === "zkPass" ? zkStatus : reclaimZkStatus}
+          msgStatus={schema.src === "zkPass" ? msgStatus : reclaimMsgStatus}
         />
       )}
     </main>
   );
 };
 
-export default ZkPassView;
+export default AddCredential;
