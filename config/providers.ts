@@ -28,4 +28,13 @@ export const schemas: Schema[] = [
     type: "KYC",
     src: "reclaim",
   },
+  {
+    id: "c94476a0-8a75-4563-b70a-bf6124d7c59b",
+    title: "Kaggle user name",
+    description: "Verify you own kaggle user name",
+    host: "Kaggle",
+    icon: "uber.png",
+    type: "KYC",
+    src: "reclaim",
+  },
 ];
