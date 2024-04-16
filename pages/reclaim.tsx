@@ -74,7 +74,7 @@ const ReclaimView: React.FC<{}> = () => {
               {schemas.map((_schema) => (
                 <li
                   className={`mb-4 p-3 rounded-md cursor-pointer ${
-                    _schema.id == schema.id ? "bg-slate-500" : ""
+                    _schema.id == schema?.id ? "bg-slate-500" : ""
                   }`}
                   key={_schema.id}
                   onClick={() => handleSchemaSelect(_schema.id)}
@@ -82,7 +82,7 @@ const ReclaimView: React.FC<{}> = () => {
                 >
                   <input
                     type="radio"
-                    checked={_schema.id === schema.id}
+                    checked={_schema.id === schema?.id}
                     readOnly
                   />
                   <div>
