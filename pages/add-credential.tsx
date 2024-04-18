@@ -1,6 +1,6 @@
 "use client";
 import { Status, useZkPass } from "../hooks/useZkPass";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { schemas } from "../config/providers";
 import { useRouter } from "next/router";
 import TransgateConnect from "@zkpass/transgate-js-sdk";
@@ -17,6 +17,8 @@ const AddCredential: React.FC<{}> = () => {
   const [isVerificationModalOpen, setVerificationModalOpen] =
     useState<boolean>(false);
   const [isProviderModalOpen, setProviderModalOpen] = useState<boolean>(true);
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const router = useRouter();
   const _schemaId = router.query.schemaId as string;
@@ -42,7 +44,7 @@ const AddCredential: React.FC<{}> = () => {
     setVeridaDid(_veridaDid);
 
     if (_schemaId && _veridaDid) {
-      if (_schema.src == 'zkPass') {
+      if (_schema.src == "zkPass") {
         handleClick(_schema, _veridaDid);
       }
       setVerificationModalOpen(true);
@@ -50,10 +52,17 @@ const AddCredential: React.FC<{}> = () => {
   }, [_schemaId, _veridaDid]);
 
   useEffect(() => {
-    if (schema && schema.src === 'reclaim' && requestUrl) {
-      handleClick(schema, veridaDid);
+    if (
+      schema &&
+      schema.src === "reclaim" &&
+      requestUrl &&
+      buttonRef &&
+      buttonRef.current
+    ) {
+      // handleClick(schema, veridaDid);
+      buttonRef.current.click();
     }
-  }, [schema, requestUrl]);
+  }, [schema, requestUrl, buttonRef, buttonRef.current]);
 
   const checkZkAvailable = async (schema: Schema) => {
     if (!schema) return;
@@ -122,6 +131,7 @@ const AddCredential: React.FC<{}> = () => {
         <VerificationModal
           isOpen={isVerificationModalOpen}
           onClose={handleModalClosed}
+          btnRef={buttonRef}
           handleBtnClick={() => handleClick(schema, veridaDid)}
           schema={schema}
           zkStatus={schema.src === "zkPass" ? zkStatus : reclaimZkStatus}
