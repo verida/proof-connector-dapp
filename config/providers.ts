@@ -20,7 +20,7 @@ export const schemas: Schema[] = [
     src: "zkPass",
   },
   {
-    id: "9d2ea353-8819-447d-9e3f-c433a0d9fe40",
+    id: "f3a4394b-191a-4889-9f5c-e0d70dc26fac",
     title: "Uber user credentials",
     description: "Verify Uber user credentials",
     host: "Uber",

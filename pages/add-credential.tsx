@@ -22,7 +22,9 @@ const AddCredential: React.FC<{}> = () => {
   const _schemaId = router.query.schemaId as string;
   const _veridaDid = router.query.veridaDid as string;
 
-  const [schema, setSchema] = useState<Schema>();
+  const [schema, setSchema] = useState<Schema>(
+    schemas.find((item) => item.id === _schemaId)
+  );
   const [veridaDid, setVeridaDid] = useState<string>(_veridaDid || "");
 
   const { verify, zkStatus, msgStatus } = useZkPass();
@@ -40,10 +42,18 @@ const AddCredential: React.FC<{}> = () => {
     setVeridaDid(_veridaDid);
 
     if (_schemaId && _veridaDid) {
-      handleClick(_schema, _veridaDid);
+      if (_schema.src == 'zkPass') {
+        handleClick(_schema, _veridaDid);
+      }
       setVerificationModalOpen(true);
     }
   }, [_schemaId, _veridaDid]);
+
+  useEffect(() => {
+    if (schema && schema.src === 'reclaim' && requestUrl) {
+      handleClick(schema, veridaDid);
+    }
+  }, [schema, requestUrl]);
 
   const checkZkAvailable = async (schema: Schema) => {
     if (!schema) return;
@@ -78,7 +88,7 @@ const AddCredential: React.FC<{}> = () => {
         if (verify) {
           verify(schema, veridaDid);
         }
-      } else {
+      } else if (requestUrl) {
         window.open(requestUrl, "_blank");
         startVerification(veridaDid, schema);
       }
