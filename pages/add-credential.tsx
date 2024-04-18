@@ -16,11 +16,11 @@ const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 const AddCredential: React.FC<{}> = () => {
   const [isVerificationModalOpen, setVerificationModalOpen] =
     useState<boolean>(false);
-  const [isProviderModalOpen, setProviderModalOpen] = useState<boolean>(true);
 
   const router = useRouter();
   const _schemaId = router.query.schemaId as string;
   const _veridaDid = router.query.veridaDid as string;
+  const [isProviderModalOpen, setProviderModalOpen] = useState<boolean>(!_schemaId || !_veridaDid);
 
   const [schema, setSchema] = useState<Schema>(
     schemas.find((item) => item.id === _schemaId)
