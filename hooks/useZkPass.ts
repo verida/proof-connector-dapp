@@ -40,7 +40,7 @@ async function sendMessage(veridaDid: string, msg: ZkPassResult, schema: Schema)
   if (res.status === 200) {
     return res;
   } else {
-    throw new Error(`Verida Message Error`);
+    throw new Error(`Verida Message Error - ${JSON.stringify(await res.json())}`);
   }
 }
 
