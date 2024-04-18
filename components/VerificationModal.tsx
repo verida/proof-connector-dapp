@@ -17,7 +17,6 @@ interface Props {
   schema: Schema;
   zkStatus: number;
   msgStatus: number;
-  btnRef: React.MutableRefObject<HTMLButtonElement>
 }
 const VerificationModal: React.FC<Props> = ({
   isOpen,
@@ -26,7 +25,6 @@ const VerificationModal: React.FC<Props> = ({
   schema,
   zkStatus,
   msgStatus,
-  btnRef,
 }) => {
   const [btnTxt, setBtnTxt] = useState("");
   useEffect(() => {
@@ -142,7 +140,7 @@ const VerificationModal: React.FC<Props> = ({
             </>
           ) : (
             !(zkStatus == Status.Success && msgStatus == Status.Success) && (
-              <ModalButton onClick={handleBtnClick} title={btnTxt} ref={btnRef} />
+              <ModalButton onClick={handleBtnClick} title={btnTxt} />
             )
           )}
         </div>

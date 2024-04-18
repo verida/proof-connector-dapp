@@ -18,8 +18,6 @@ const AddCredential: React.FC<{}> = () => {
     useState<boolean>(false);
   const [isProviderModalOpen, setProviderModalOpen] = useState<boolean>(true);
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
   const router = useRouter();
   const _schemaId = router.query.schemaId as string;
   const _veridaDid = router.query.veridaDid as string;
@@ -51,18 +49,11 @@ const AddCredential: React.FC<{}> = () => {
     }
   }, [_schemaId, _veridaDid]);
 
-  useEffect(() => {
-    if (
-      schema &&
-      schema.src === "reclaim" &&
-      requestUrl &&
-      buttonRef &&
-      buttonRef.current
-    ) {
-      // handleClick(schema, veridaDid);
-      buttonRef.current.click();
-    }
-  }, [schema, requestUrl, buttonRef, buttonRef.current]);
+  // useEffect(() => {
+  //   if (schema && schema.src === "reclaim" && requestUrl) {
+  //     handleClick(schema, veridaDid);
+  //   }
+  // }, [schema, requestUrl]);
 
   const checkZkAvailable = async (schema: Schema) => {
     if (!schema) return;
@@ -98,7 +89,7 @@ const AddCredential: React.FC<{}> = () => {
           verify(schema, veridaDid);
         }
       } else if (requestUrl) {
-        window.open(requestUrl, "_blank");
+        window.open(requestUrl, "_self");
         startVerification(veridaDid, schema);
       }
     },
@@ -131,7 +122,6 @@ const AddCredential: React.FC<{}> = () => {
         <VerificationModal
           isOpen={isVerificationModalOpen}
           onClose={handleModalClosed}
-          btnRef={buttonRef}
           handleBtnClick={() => handleClick(schema, veridaDid)}
           schema={schema}
           zkStatus={schema.src === "zkPass" ? zkStatus : reclaimZkStatus}
