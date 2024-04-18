@@ -2,12 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { Client, Network } from "@verida/client-ts";
 import { EnvironmentType, Web3CallType } from "@verida/types";
 import { AutoAccount } from "@verida/account-node";
+import { generateVerifiableCredentials } from "../../hooks/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const body = JSON.parse(req.body);
+    const { msg, veridaDid, schema } = body;
     // Create a connection to the network and open your context
-    const VERIDA_ENVIRONMENT = EnvironmentType.TESTNET;
+    const VERIDA_ENVIRONMENT =
+      process.env.IS_DEV === "true"
+        ? EnvironmentType.TESTNET
+        : EnvironmentType.MAINNET;
     const CONTEXT_NAME = "Dapp Connector";
     const PK = `0x${process.env.PRIVATE_KEY}`;
     const VERIDA_SEED = process.env.VERIDA_SEED;
@@ -17,7 +26,7 @@ export default async function handler(req, res) {
     // MATIC to perform a blockchain transaction to create your DID
     // (If it doesn't exist)
     const DID_CLIENT_CONFIG = {
-      callType: "web3",
+      callType: "web3" as Web3CallType,
       web3Config: {
         // Polygon private key
         privateKey: PK,
@@ -39,31 +48,43 @@ export default async function handler(req, res) {
     });
 
     if (context) {
+      const credentials = await generateVerifiableCredentials(
+        context,
+        veridaDid,
+        msg,
+        schema
+      );
+
+      console.log("credentials: ", credentials);
+      if (!credentials) {
+        res.status(500).json("Cannot create Verida credentials");
+        return;
+      }
+
       const messaging = await context?.getMessaging();
       const type = "inbox/type/dataSend";
 
-      const data = {
-        data: body.msg,
-      };
-      const message = "ZkPass result";
+      const message = `zkPass credential: ${schema.host}`;
 
       const result = await messaging?.send(
-        body.veridaDid,
+        veridaDid,
         type,
-        data,
+        { data: [credentials] },
         message,
         {
-          did: body.veridaDid,
+          did: veridaDid,
+          recipientContextName: "Verida: Vault",
         }
       );
 
       console.log("Sent : ", result);
       res.status(200).json(result);
+      await context.close();
+    } else {
+      res.status(500).json("Cannot create Verida Context");
     }
   } catch (err) {
     console.log("Error while messaging: ", err);
     res.status(500).json(err);
   }
-
-  await context.close()
 }

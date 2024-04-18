@@ -1,23 +1,27 @@
 import { useCallback, useEffect, useState } from "react";
 import { RECLAIM_APP_ID } from "../config/config";
-import { Reclaim } from "@reclaimprotocol/js-sdk";
+import { Status } from "./useZkPass";
+import { Schema, ZkPassResult } from "../@types";
 
-export const useReclaim = (provider_id) => {
-  const reclaimClient = new Reclaim.ProofRequest(RECLAIM_APP_ID);
-  const [requestUrl, setRequestUrl] = useState("");
-  const [statusUrl, setStatusUrl] = useState("");
+export const useReclaim = (schema: Schema) => {
+  const [requestUrl, setRequestUrl] = useState<string>("");
+  const [statusUrl, setStatusUrl] = useState<string>("");
 
-  const [statusTxt, setStatusTxt] = useState("");
-  let intervalId;
+  const [statusTxt, setStatusTxt] = useState<string>("");
+  const [zkStatus, setZkStatus] = useState<number>(Status.None);
+  const [msgStatus, setMsgStatus] = useState<number>(Status.None);
+
+  let intervalId: NodeJS.Timer;
 
   useEffect(() => {
     (async () => {
+      if (!schema || schema.src !== "reclaim") return;
       setStatusTxt("Generating verification link");
       const res = await fetch("/api/reclaim-verification", {
         method: "POST",
         body: JSON.stringify({
           app_id: RECLAIM_APP_ID,
-          provider_id: provider_id,
+          provider_id: schema.id,
         }),
       });
 
@@ -31,30 +35,39 @@ export const useReclaim = (provider_id) => {
         setStatusTxt("Failed generatig verification link.");
       }
     })();
-  }, [provider_id]);
+  }, [schema]);
 
-  async function sendMessage(veridaDid, msg) {
+  async function sendMessage(
+    veridaDid: string,
+    msg: ZkPassResult,
+    schema: Schema
+  ) {
     const res = await fetch("/api/send-message", {
       method: "POST",
       body: JSON.stringify({
         msg,
         veridaDid,
+        schema,
       }),
     });
 
     if (res.status === 200) {
       return res;
     } else {
-      throw new Error(`Verida Message Error`);
+      throw new Error(`Verida Message Error - ${JSON.stringify(await res.json())}`);
     }
   }
 
   const startVerification = useCallback(
-    (veridaDid) => {
+    (veridaDid: string, schema: Schema) => {
+      setZkStatus(Status.None);
+      setMsgStatus(Status.None);
+
       clearInterval(intervalId);
       if (statusUrl) {
         intervalId = setInterval(async () => {
           setStatusTxt("Waiting to generate proof..");
+          setZkStatus(Status.Processing);
           fetch(statusUrl)
             .then(async (res) => {
               const data = await res.json();
@@ -63,25 +76,30 @@ export const useReclaim = (provider_id) => {
                 const context = data.session.proofs[0].claimData.context;
                 console.log("context: ", context);
                 clearInterval(intervalId);
+                setZkStatus(Status.Success);
 
                 setStatusUrl(
                   "Generated proof. Sending message to verida app..."
                 );
 
-                if (msg) {
+                if (context) {
                   try {
-                    await sendMessage(veridaDid, context);
+                    setMsgStatus(Status.Processing);
+                    await sendMessage(veridaDid, context, schema);
                     setStatusTxt("Message sent!");
+                    setMsgStatus(Status.Success);
                   } catch (err) {
                     console.log("Verida Message error: ", err);
                     setStatusTxt("Message sent failed.");
+                    setMsgStatus(Status.Failed);
                   }
                 }
               }
             })
             .catch((err) => {
-                console.log('error in generating proof: ', err);
+              console.log("error in generating proof: ", err);
               setStatusUrl("Failed to generate proof");
+              setZkStatus(Status.Failed);
             });
         }, 3000);
       }
@@ -90,5 +108,12 @@ export const useReclaim = (provider_id) => {
     [statusUrl, requestUrl]
   );
 
-  return { requestUrl, statusUrl, startVerification, statusTxt };
+  return {
+    requestUrl,
+    statusUrl,
+    startVerification,
+    statusTxt,
+    zkStatus,
+    msgStatus,
+  };
 };

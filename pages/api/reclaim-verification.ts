@@ -1,11 +1,13 @@
 import { Reclaim } from "@reclaimprotocol/js-sdk";
+import { NextApiRequest, NextApiResponse } from "next";
+import {v4 as uuidv4} from 'uuid';
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const body = JSON.parse(req.body);
 
     const { app_id, provider_id } = body;
-    const reclaimClient = new Reclaim.ProofRequest(app_id);
+    const reclaimClient = new Reclaim.ProofRequest(app_id, uuidv4());
     const APP_SECRET = process.env.RECLAIM_SECRET_KEY;
 
     console.log('reclaim: ', app_id, provider_id, APP_SECRET)
@@ -17,6 +19,8 @@ export default async function handler(req, res) {
     );
     const { requestUrl, statusUrl } =
       await reclaimClient.createVerificationRequest();
+
+    
     res.status(200).json({
       requestUrl,
       statusUrl,
