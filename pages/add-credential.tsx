@@ -20,7 +20,9 @@ const AddCredential: React.FC<{}> = () => {
   const router = useRouter();
   const _schemaId = router.query.schemaId as string;
   const _veridaDid = router.query.veridaDid as string;
-  const [isProviderModalOpen, setProviderModalOpen] = useState<boolean>(!_schemaId || !_veridaDid);
+  const [isProviderModalOpen, setProviderModalOpen] = useState<boolean>(
+    !_schemaId || !_veridaDid
+  );
 
   const [schema, setSchema] = useState<Schema>(
     schemas.find((item) => item.id === _schemaId)
@@ -89,7 +91,7 @@ const AddCredential: React.FC<{}> = () => {
           verify(schema, veridaDid);
         }
       } else if (requestUrl) {
-        window.open(requestUrl, "_self");
+        window.open(requestUrl, "_blank");
         startVerification(veridaDid, schema);
       }
     },
@@ -126,6 +128,9 @@ const AddCredential: React.FC<{}> = () => {
           schema={schema}
           zkStatus={schema.src === "zkPass" ? zkStatus : reclaimZkStatus}
           msgStatus={schema.src === "zkPass" ? msgStatus : reclaimMsgStatus}
+          enabled={
+            schema.src === "zkPass" || (schema.src == "reclaim" && !!requestUrl)
+          }
         />
       )}
     </main>

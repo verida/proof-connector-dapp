@@ -17,6 +17,7 @@ interface Props {
   schema: Schema;
   zkStatus: number;
   msgStatus: number;
+  enabled: boolean;
 }
 const VerificationModal: React.FC<Props> = ({
   isOpen,
@@ -25,6 +26,7 @@ const VerificationModal: React.FC<Props> = ({
   schema,
   zkStatus,
   msgStatus,
+  enabled,
 }) => {
   const [btnTxt, setBtnTxt] = useState("");
   useEffect(() => {
@@ -140,7 +142,7 @@ const VerificationModal: React.FC<Props> = ({
             </>
           ) : (
             !(zkStatus == Status.Success && msgStatus == Status.Success) && (
-              <ModalButton onClick={handleBtnClick} title={btnTxt} />
+              <ModalButton onClick={handleBtnClick} title={btnTxt} disabled={!enabled} />
             )
           )}
         </div>
