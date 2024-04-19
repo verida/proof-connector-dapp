@@ -32,6 +32,7 @@ This application directs a user to generate a zero knowledge proof (using [zkPas
 ## Run
 ```
 yarn install
+yarn build
 yarn start
 ```
 - http://localhost:3000/add-credential?schemaId=[schemaId]&veridaDid=[veridaDid]
