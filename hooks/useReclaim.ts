@@ -54,7 +54,9 @@ export const useReclaim = (schema: Schema) => {
     if (res.status === 200) {
       return res;
     } else {
-      throw new Error(`Verida Message Error - ${JSON.stringify(await res.json())}`);
+      throw new Error(
+        `Verida Message Error - ${JSON.stringify(await res.json())}`
+      );
     }
   }
 
@@ -63,7 +65,10 @@ export const useReclaim = (schema: Schema) => {
       setZkStatus(Status.None);
       setMsgStatus(Status.None);
 
-      clearInterval(intervalId);
+      if (intervalId) {
+        clearInterval(intervalId[Symbol.toPrimitive]());
+      }
+      
       if (statusUrl) {
         intervalId = setInterval(async () => {
           setStatusTxt("Waiting to generate proof..");
@@ -75,7 +80,7 @@ export const useReclaim = (schema: Schema) => {
               if (data.session.status == "Ok") {
                 const context = data.session.proofs[0].claimData.context;
                 console.log("context: ", context);
-                clearInterval(intervalId);
+                clearInterval(intervalId[Symbol.toPrimitive]());
                 setZkStatus(Status.Success);
 
                 setStatusUrl(

@@ -13,33 +13,29 @@ This application directs a user to generate a zero knowledge proof (using [zkPas
 - Follow [this](https://zkpass.gitbook.io/zkpass/developer-guides/quick-start) instructions 
 - Create new application and register necessary [schemas](https://zkpass.gitbook.io/zkpass/developer-guides/schema) .
 - Get `APP_ID`
-- In `src/config/zk-schema.js` update schemas with your own schemas.
+- In `src/config/providers.ts` update schemas with your own schemas.
 - Update `NEXT_PUBLIC_ZKPASS_APP_ID` in .env file.
 
 ### Setup Reclaim account
 - Go to https://dev.reclaimprotocol.org/dashboard
 - Create new app and register necessary providers
-- In `src/reclaim-providers.js` update provider data with your own providers.
+- In `src/config/providers.ts` update provider data with your own providers.
 - Update `NEXT_PUBLIC_RECLAIM_APP_ID` in .env file
 - Update `RECLAIM_SECRET_KEY` in .env file
 
-### Add private key to send message through Verida messaging system
+### Add PRIVATE_KEY to send message through Verida messaging system
 - Update `PRIVATE_KEY` in .env file.
+
+### Add VERIDA_SEED to send message through Verida messaging system. You get this from Verida Wallet.
+- Update `VERIDA_SEED` in .env file
 
 ## Run
 ```
-npm i
-npm run start
+yarn install
+yarn build
+yarn start
 ```
-- Using zkPass
-```
-http://localhost:3000/zkpass?schemaId=[schemaId]&veridaDid=[veridaDid]
-Or
-http://localhost:3000/zkpass?veridaDid=[veridaDid]
-```
-- Using Reclaim
-```
-http://localhost:3000/reclaim?schemaId=[schemaId]&veridaDid=[veridaDid]
-Or
-http://localhost:3000/reclaim?veridaDid=[veridaDid]
+- http://localhost:3000/add-credential?schemaId=[schemaId]&veridaDid=[veridaDid]
+
+- http://localhost:3000/add-credential?veridaDid=[veridaDid]
 ```
