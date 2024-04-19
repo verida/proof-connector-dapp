@@ -13,13 +13,13 @@ This application directs a user to generate a zero knowledge proof (using [zkPas
 - Follow [this](https://zkpass.gitbook.io/zkpass/developer-guides/quick-start) instructions 
 - Create new application and register necessary [schemas](https://zkpass.gitbook.io/zkpass/developer-guides/schema) .
 - Get `APP_ID`
-- In `src/config/providers.js` update schemas with your own schemas.
+- In `src/config/providers.ts` update schemas with your own schemas.
 - Update `NEXT_PUBLIC_ZKPASS_APP_ID` in .env file.
 
 ### Setup Reclaim account
 - Go to https://dev.reclaimprotocol.org/dashboard
 - Create new app and register necessary providers
-- In `src/config/providers.js` update provider data with your own providers.
+- In `src/config/providers.ts` update provider data with your own providers.
 - Update `NEXT_PUBLIC_RECLAIM_APP_ID` in .env file
 - Update `RECLAIM_SECRET_KEY` in .env file
 
