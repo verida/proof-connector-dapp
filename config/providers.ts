@@ -33,7 +33,7 @@ export const schemas: Schema[] = [
     title: "Kaggle user name",
     description: "Verify you own kaggle user name",
     host: "Kaggle",
-    icon: "uber.png",
+    icon: "kaggle.png",
     type: "KYC",
     src: "reclaim",
   },

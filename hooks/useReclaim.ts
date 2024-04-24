@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { RECLAIM_APP_ID } from "../config/config";
 import { Status } from "./useZkPass";
-import { Schema, ZkPassResult } from "../@types";
+import { ReclaimResult, Schema, ZkPassResult } from "../@types";
 
 export const useReclaim = (schema: Schema) => {
   const [requestUrl, setRequestUrl] = useState<string>("");
@@ -39,7 +39,7 @@ export const useReclaim = (schema: Schema) => {
 
   async function sendMessage(
     veridaDid: string,
-    msg: ZkPassResult,
+    msg: ReclaimResult,
     schema: Schema
   ) {
     const res = await fetch("/api/send-message", {
@@ -90,7 +90,11 @@ export const useReclaim = (schema: Schema) => {
                 if (context) {
                   try {
                     setMsgStatus(Status.Processing);
-                    await sendMessage(veridaDid, context, schema);
+                    await sendMessage(veridaDid, {
+                      ...context,
+                      reclaimProviderId: schema.id,
+                      reclaimProviderLabel: schema.title
+                    }, schema);
                     setStatusTxt("Message sent!");
                     setMsgStatus(Status.Success);
                   } catch (err) {

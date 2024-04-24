@@ -51,12 +51,6 @@ const AddCredential: React.FC<{}> = () => {
     }
   }, [_schemaId, _veridaDid]);
 
-  // useEffect(() => {
-  //   if (schema && schema.src === "reclaim" && requestUrl) {
-  //     handleClick(schema, veridaDid);
-  //   }
-  // }, [schema, requestUrl]);
-
   const checkZkAvailable = async (schema: Schema) => {
     if (!schema) return;
     if (schema.src === "zkPass") {

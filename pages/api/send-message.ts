@@ -1,5 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-import { Client, Network } from "@verida/client-ts";
+import { Network } from "@verida/client-ts";
 import { EnvironmentType, Web3CallType } from "@verida/types";
 import { AutoAccount } from "@verida/account-node";
 import { generateVerifiableCredentials } from "../../hooks/utils";
@@ -17,7 +16,7 @@ export default async function handler(
       process.env.IS_DEV === "true"
         ? EnvironmentType.TESTNET
         : EnvironmentType.MAINNET;
-    const CONTEXT_NAME = "Dapp Connector";
+    const CONTEXT_NAME = "Proof Connector";
     const PK = `0x${process.env.PRIVATE_KEY}`;
     const VERIDA_SEED = process.env.VERIDA_SEED;
 
@@ -55,7 +54,6 @@ export default async function handler(
         schema
       );
 
-      console.log("credentials: ", credentials);
       if (!credentials) {
         res.status(500).json("Cannot create Verida credentials");
         return;
@@ -64,7 +62,10 @@ export default async function handler(
       const messaging = await context?.getMessaging();
       const type = "inbox/type/dataSend";
 
-      const message = `zkPass credential: ${schema.host}`;
+      const message =
+        schema.src === "zkPass"
+          ? `zkPass credential: ${schema.host}`
+          : `reclaim credentials: ${schema.host}`;
 
       const result = await messaging?.send(
         veridaDid,
