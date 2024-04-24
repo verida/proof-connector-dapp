@@ -1,0 +1,18 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - yarn install
+    build:
+      commands:
+        - env | grep -e NEXT_PUBLIC_ZKPASS_APP_ID -e PRIVATE_KEY -e NEXT_PUBLIC_RECLAIM_APP_ID -e RECLAIM_SECRET_KEY -e VERIDA_SEED >> .env
+        - yarn run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - node_modules/**/*

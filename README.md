@@ -39,3 +39,16 @@ yarn start
 
 - http://localhost:3000/add-credential?veridaDid=[veridaDid]
 ```
+
+## Deployment
+
+We deploy using AWS Amplify. Make sure all env variables are set in the Amplify console and added into amplify.yml for serverside rendering.
+
+Eg:
+```
+      commands:
+        - env | grep -e NEXT_PUBLIC_ZKPASS_APP_ID -e PRIVATE_KEY -e NEXT_PUBLIC_RECLAIM_APP_ID -e RECLAIM_SECRET_KEY -e VERIDA_SEED >> .env
+
+```
+
+See https://docs.aws.amazon.com/amplify/latest/userguide/ssr-environment-variables.html
