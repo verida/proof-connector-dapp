@@ -1,5 +1,12 @@
 import { Schema } from "../@types";
 
+export const CredentialSchema = {
+  zkPass:
+    "https://common.schemas.verida.io/credential/zkpass/v0.1.0/schema.json",
+  reclaim:
+    "https://common.schemas.verida.io/credential/reclaim/v0.1.0/schema.json",
+};
+
 export const schemas: Schema[] = [
   {
     id: "ef39adb26c88439591279e25e7856b61",

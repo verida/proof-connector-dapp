@@ -1,6 +1,7 @@
 import { Credentials } from "@verida/verifiable-credentials";
 import { ReclaimResult, Schema, ZkPassResult } from "../@types";
 import { Context } from "@verida/client-ts";
+import { CredentialSchema } from "../config/providers";
 export const generateVerifiableCredentials = async (
   context: Context,
   veridaDid: string,
@@ -13,13 +14,7 @@ export const generateVerifiableCredentials = async (
   // The Verida DID that is the subject of this credential (who is being verified with this credential?)
   // const veridaDid = 'did:vda:testnet:0x7c9699514D3e150e6F50d63345D4bD7B9831da7f';
 
-  const zkPassCredentialSchema =
-    "https://common.schemas.verida.io/credential/zkpass/v0.1.0/schema.json";
-  const reclaimCredentialSchema =
-    "https://common.schemas.verida.io/credential/reclaim/v0.1.0/schema.json";
-
-  const credentialSchema =
-    schema.src === "zkPass" ? zkPassCredentialSchema : reclaimCredentialSchema;
+  const credentialSchema = CredentialSchema[schema.src];
   // Data for the credential that matches the credential schema
   const credentialData = {
     ...data,
