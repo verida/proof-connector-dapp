@@ -20,3 +20,23 @@ export type ZkPassResult = {
   zkPassSchemaId?: string;
   zkPassSchemaLabel?: string;
 };
+
+type ReclaimClaimData = {
+  provider: string;
+  parameters: string;
+  identifier: string;
+  epoch: string;
+};
+type ReclaimProof = {
+  identifier: string;
+  claimData: ReclaimClaimData;
+  signature: string;
+};
+export type ReclaimResult = {
+  appId: string;
+  httpProviderId: string[];
+  proofs: ReclaimProof[];
+  sessionId: string;
+  reclaimProviderId: string;
+  reclaimProviderLabel: string;
+};
