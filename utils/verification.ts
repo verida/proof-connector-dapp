@@ -16,6 +16,7 @@ export const verifyZKProof = (proof: VeridaCredentialRecord): boolean => {
       publicFields,
       publicFieldsHash,
       validatorSignature,
+      allocatorAddress
     } = credentialData as ZkPassResult;
 
     // verify allocator signature
@@ -31,7 +32,7 @@ export const verifyZKProof = (proof: VeridaCredentialRecord): boolean => {
       allocatorSignature
     );
 
-    if (signedAllocationAddress !== validatorAddress) {
+    if (signedAllocationAddress !== allocatorAddress) {
       return false;
     }
 

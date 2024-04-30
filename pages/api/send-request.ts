@@ -58,10 +58,12 @@ export default async function ioHandler(
                 let verified = false;
 
                 if (proof.credentialSchema === CredentialSchema.zkPass) {
+                  console.log('zk verification start')
                   verified = verifyZKProof(proof);
                 } else if (
                   proof.credentialSchema === CredentialSchema.reclaim
                 ) {
+                  console.log('reclaim verification start')
                   verified = await verifyReclaimProof(proof);
                 }
 
