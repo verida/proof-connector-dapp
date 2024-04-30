@@ -171,14 +171,10 @@ import {
     const messaging = await context.getMessaging();
     const type = VeridaMessageType.DATA_MESSAGE;
   
-    const dataToSend: SendMessageData<DataMessage> = {
-      data: [msg],
-    };
-  
     const result = await messaging?.send(
       msg.targetDid,
       type,
-      dataToSend,
+      {data: [msg.message]},
       msg.messageSubject,
       {
         did: msg.targetDid,
