@@ -5,6 +5,8 @@ export const CredentialSchema = {
     "https://common.schemas.verida.io/credential/zkpass/v0.1.0/schema.json",
   reclaim:
     "https://common.schemas.verida.io/credential/reclaim/v0.1.0/schema.json",
+  baseCredential:
+    "https://common.schemas.verida.io/credential/base/v0.2.0/schema.json",
 };
 
 export const schemas: Schema[] = [

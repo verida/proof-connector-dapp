@@ -112,7 +112,7 @@ export const useReclaim = (schema: Schema) => {
             });
         }, 3000);
       }
-      return () => clearInterval(intervalId);
+      return () => clearInterval(intervalId[Symbol.toPrimitive]());
     },
     [statusUrl, requestUrl]
   );

@@ -1,7 +1,4 @@
-import { Network } from "@verida/client-ts";
-import { EnvironmentType, Web3CallType } from "@verida/types";
-import { AutoAccount } from "@verida/account-node";
-import { generateVerifiableCredentials } from "../../hooks/utils";
+import { generateVerifiableCredentials, getApplicationContext, sendMessage } from "../../utils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Schema } from "../../@types";
 
@@ -12,40 +9,8 @@ export default async function handler(
   try {
     const body = JSON.parse(req.body);
     const { msg, veridaDid, schema } = body;
-    // Create a connection to the network and open your context
-    const VERIDA_ENVIRONMENT =
-      process.env.IS_DEV === "true"
-        ? EnvironmentType.TESTNET
-        : EnvironmentType.MAINNET;
-    const CONTEXT_NAME = "Verida: Proof Connector";
-    const PK = `0x${process.env.PRIVATE_KEY}`;
-    const VERIDA_SEED = process.env.VERIDA_SEED;
 
-    // Configuration for the DID client
-    // `privateKey` must be a Polygon private key that has enough
-    // MATIC to perform a blockchain transaction to create your DID
-    // (If it doesn't exist)
-    const DID_CLIENT_CONFIG = {
-      callType: "web3" as Web3CallType,
-      web3Config: {
-        // Polygon private key
-        privateKey: PK,
-      },
-    };
-
-    const context = await Network.connect({
-      context: {
-        name: CONTEXT_NAME,
-      },
-      client: {
-        environment: VERIDA_ENVIRONMENT,
-      },
-      account: new AutoAccount({
-        privateKey: VERIDA_SEED, // or Verida mnemonic seed phrase
-        environment: VERIDA_ENVIRONMENT,
-        didClientConfig: DID_CLIENT_CONFIG,
-      }),
-    });
+    const context = await getApplicationContext();
 
     if (context) {
       const credentials = await generateVerifiableCredentials(
@@ -60,19 +25,15 @@ export default async function handler(
         return;
       }
 
-      const messaging = await context?.getMessaging();
-      const type = "inbox/type/dataSend";
-
       const message = `New Credential Proof: ${(schema as Schema).host}`;
-
-      const result = await messaging?.send(
-        veridaDid,
-        type,
-        { data: [credentials] },
-        message,
+      
+      const result = await sendMessage(
+        context,
         {
-          did: veridaDid,
-          recipientContextName: "Verida: Vault",
+          message: credentials,
+          messageSubject: message,
+          targetDid: veridaDid,
+          targetContext: "Verida: Vault"
         }
       );
 
