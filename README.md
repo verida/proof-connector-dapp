@@ -7,6 +7,7 @@ This application directs a user to generate a zero knowledge proof (using [zkPas
 - Verify if you exceed trading volume on Binance
 - Verify if you are discord owner
 - Verify if you have Uber account
+- Verify credentials from zkPass and Reclaim protocol
 
 ## Setup
 ### Setup zkPass account
@@ -39,6 +40,15 @@ yarn start
 
 - http://localhost:3000/add-credential?veridaDid=[veridaDid]
 ```
+
+## Verify credentials from zkPass and reclaim protocol.
+- Open `http://localhost:3000/verify
+- Connect to your verida wallet
+- Click `Request credential`
+
+### How it works?
+The system initiates a data request to the connected wallet's inbox. Upon the user providing their credentials, the backend system proceeds to authenticate the validity of the credentials, based on the credential types such as zkPass or reclaim.
+
 
 ## Deployment
 
