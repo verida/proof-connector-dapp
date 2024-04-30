@@ -30,17 +30,24 @@ export default function useAccount() {
   const connect = useCallback(async () => {
     if (!webUserInstanceRef) return;
     setIsConnecting(true);
-    const connected = await webUserInstanceRef.current.connect();
-    setIsConnecting(false);
-    setConnected(connected);
-    setDid(webUserInstanceRef.current?.getDid());
-    setAccount(webUserInstanceRef.current);
+    try {
+      const connected = await webUserInstanceRef.current.connect();
+      setIsConnecting(false);
+      setConnected(connected);
+      setDid(webUserInstanceRef.current?.getDid());
+      setAccount(webUserInstanceRef.current);
+    } catch (err) {
+      console.error("Error while connecting verida wallet");
+    }
   }, [webUserInstanceRef]);
 
   const disconnect = useCallback(async () => {
     if (!webUserInstanceRef) return;
     await webUserInstanceRef.current?.disconnect();
-  }, [webUserInstanceRef])
+    setConnected(false);
+    setDid(undefined);
+    setAccount(undefined);
+  }, [webUserInstanceRef]);
 
   return { isConnected, isConnecting, did, account, connect, disconnect };
 }

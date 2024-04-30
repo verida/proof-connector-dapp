@@ -5,6 +5,7 @@ import {
   REQUEST_VERIFICATION,
   USER_JOIN,
   VERIFICATION_RESULT,
+  VERIFICATION_FAILED,
 } from "../../constants/io_constants";
 import {
   getApplicationContext,
@@ -45,34 +46,50 @@ export default async function ioHandler(
         const msg = JSON.parse(body);
         console.log("received request from client: ", msg, veridaDid);
 
-        const result = await sendDataRequest(
-          context,
-          veridaDid,
-          msg as SendDataRequestOptions,
-          async (data: ReceivedMessage<VeridaCredentialRecord>) => {
-            console.log("data received: ", data, data?.data?.data);
-            const proof = data.data.data?.[0];
-            let verified = false;
+        try {
+          const result = await sendDataRequest(
+            context,
+            veridaDid,
+            msg as SendDataRequestOptions,
+            async (data: ReceivedMessage<VeridaCredentialRecord>) => {
+              console.log("data received: ", data, data?.data?.data);
+              try {
+                const proof = data.data.data?.[0];
+                let verified = false;
 
-            if (proof.credentialSchema === CredentialSchema.zkPass) {
-              verified = verifyZKProof(proof);
-            } else if (proof.credentialSchema === CredentialSchema.reclaim) {
-              verified = await verifyReclaimProof(proof);
+                if (proof.credentialSchema === CredentialSchema.zkPass) {
+                  verified = verifyZKProof(proof);
+                } else if (
+                  proof.credentialSchema === CredentialSchema.reclaim
+                ) {
+                  verified = await verifyReclaimProof(proof);
+                }
+
+                const verificationResult: VerificationResult = {
+                  result: verified,
+                  veridaDid,
+                  credentialSchema: proof.credentialSchema,
+                  credentialData: proof.credentialData,
+                };
+
+                io.in(roomId as string).emit(
+                  VERIFICATION_RESULT,
+                  verificationResult
+                );
+              } catch (err) {
+                io.in(roomId as string).emit(VERIFICATION_FAILED, {
+                  veridaDid,
+                  error: err,
+                });
+              }
             }
-
-            const verificationResult: VerificationResult = {
-              result: verified,
-              veridaDid,
-              credentialSchema: proof.credentialSchema,
-              credentialData: proof.credentialData,
-            };
-
-            io.in(roomId as string).emit(
-              VERIFICATION_RESULT,
-              verificationResult
-            );
-          }
-        );
+          );
+        } catch (error) {
+          io.in(roomId as string).emit(VERIFICATION_FAILED, {
+            veridaDid,
+            error,
+          });
+        }
       });
 
       // Leave the room if the user closes the socket

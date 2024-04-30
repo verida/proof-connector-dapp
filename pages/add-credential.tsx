@@ -95,10 +95,12 @@ const AddCredential: React.FC<{}> = () => {
   const handleSchemaSelect = (schema: Schema) => {
     setSchema(schema);
     setVerificationModalOpen(true);
+    setProviderModalOpen(false);
   };
 
   const handleModalClosed = () => {
     setVerificationModalOpen(false);
+    setProviderModalOpen(true);
   };
 
   return (

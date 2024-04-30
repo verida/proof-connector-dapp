@@ -5,6 +5,7 @@ import { Socket, io } from "socket.io-client";
 import {
   REQUEST_VERIFICATION,
   USER_JOIN,
+  VERIFICATION_FAILED,
   VERIFICATION_RESULT,
 } from "../constants/io_constants";
 
@@ -19,15 +20,17 @@ export default function useVerify() {
       await registerSocket(did);
       return;
     }
-
+    console.log("Requested verification");
     setVerifying(true);
 
     const msg: SendDataRequestOptions = {
       requestSchema: CredentialSchema.baseCredential,
       filter: {
-        $or: Object.entries(CredentialSchema).map(([src, url]) => ({
-          credentialSchema: url,
-        })),
+        $or: Object.entries(CredentialSchema)
+          .filter(([k, v]) => k === "zkPass" || k === "reclaim")
+          .map(([src, url]) => ({
+            credentialSchema: url,
+          })),
       },
       userSelect: true,
       messageSubject: "Please select your verifiable credential to verify",
@@ -54,9 +57,18 @@ export default function useVerify() {
         console.log("user joint: ", roomId);
       });
 
-      socketRef.current.on(VERIFICATION_RESULT, (res: string) => {
+      socketRef.current.on(VERIFICATION_RESULT, (res: any) => {
         console.log("verification result: ", res);
-        setVerificationResult(JSON.parse(res));
+        try {
+          setVerificationResult(JSON.parse(res));
+        } catch (err) {
+          setVerificationResult(res);
+        }
+        setVerifying(false);
+      });
+
+      socketRef.current.on(VERIFICATION_FAILED, (res: string) => {
+        console.log("verification failed: ", res);
         setVerifying(false);
       });
     });
