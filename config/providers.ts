@@ -46,4 +46,13 @@ export const schemas: Schema[] = [
     type: "KYC",
     src: "reclaim",
   },
+  {
+    id: "556ed720e40c4fb48ea7545708e47c90",
+    title: "Verify Binance account",
+    description: "Verify you own binance account",
+    host: "Binance",
+    icon: "binance.png",
+    type: "KYC",
+    src: "zkPass",
+  },
 ];
