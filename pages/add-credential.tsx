@@ -47,6 +47,7 @@ const AddCredential: React.FC<{}> = () => {
       if (_schema.src == "zkPass") {
         handleClick(_schema, _veridaDid);
       }
+      setProviderModalOpen(false);
       setVerificationModalOpen(true);
     }
   }, [_schemaId, _veridaDid]);

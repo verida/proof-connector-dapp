@@ -71,7 +71,7 @@ export const ProviderSelectionModal = ({
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
-          <ul className="">
+          <ul className="max-h-[500px] overflow-auto">
             {providers.map((schema, id) => {
               return (
                 <li

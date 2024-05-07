@@ -19,7 +19,7 @@
     "@verida/client-ts": "^3.0.3",
     "@verida/helpers": "^3.0.1",
     "@verida/types": "^3.0.0",
-    "@verida/verifiable-credentials": "^3.0.3",
+    "@verida/verifiable-credentials": "^3.0.4",
     "@verida/web-helpers": "^3.1.2",
     "@zkpass/transgate-js-sdk": "^0.1.0",
     "autoprefixer": "^10.4.19",
