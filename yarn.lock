@@ -1098,10 +1098,10 @@
     axios "^0.27.2"
     ethers "^5.7.0"
 
-"@verida/verifiable-credentials@^3.0.4":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@verida/verifiable-credentials/-/verifiable-credentials-3.0.4.tgz#c3859d8a9260e0ea63107c18720aa53b1f86d92b"
-  integrity sha512-noGDsgzFolvhi4cobelAwsJYPmK5QpfNhI7g0r2PgF3K1S+4Qdgccw2g17qjic/JfI8kWO7wzwLykyCFMs4zlQ==
+"@verida/verifiable-credentials@^3.0.5-alpha.0":
+  version "3.0.5-alpha.0"
+  resolved "https://registry.yarnpkg.com/@verida/verifiable-credentials/-/verifiable-credentials-3.0.5-alpha.0.tgz#37dadd369d25c86248bafcb78ccfbca531348281"
+  integrity sha512-ZOK36YfrNEHv25k5lTKTNoOKcf1+ZfaJhTC8PuYrGdKloQbFA6OnVLjctzZnxXZULtZl5HAQUM53TezIT5fU0A==
   dependencies:
     "@verida/encryption-utils" "^3.0.0"
     "@verida/helpers" "^3.0.3"

@@ -27,6 +27,7 @@ export default async function handler(
 
       const message = `New Credential Proof: ${(schema as Schema).host}`;
       
+      console.log('credentials: ', credentials);
       const result = await sendMessage(
         context,
         {
