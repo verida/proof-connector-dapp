@@ -80,7 +80,7 @@ export const ProviderSelectionModal = ({
                   key={id}
                 >
                   <div className="flex gap-2 border-[1px] rounded-md px-3 py-2">
-                    <div className="relative">
+                    <div className="relative h-fit">
                       <Image
                         src={`/imgs/${schema.icon}`}
                         width={48}
@@ -100,7 +100,7 @@ export const ProviderSelectionModal = ({
                       <span className="text-black font-semibold">
                         {schema.host}
                       </span>
-                      <span className="text-[#777777]">
+                      <span className="text-[#777777] text-start">
                         {schema.description}
                       </span>
                     </div>
