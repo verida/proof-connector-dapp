@@ -1,6 +1,7 @@
 import { generateVerifiableCredentials, getApplicationContext, sendMessage } from "../../utils";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Schema } from "../../@types";
+import os from 'os';
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,6 +29,11 @@ export default async function handler(
       const message = `New Credential Proof: ${(schema as Schema).host}`;
       
       console.log('credentials: ', credentials);
+
+      // Change directory for temp files
+      process.chdir(os.tmpdir());
+      console.log("directory has successfully been changed: ", os.tmpdir());
+
       const result = await sendMessage(
         context,
         {
