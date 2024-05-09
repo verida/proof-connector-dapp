@@ -52,6 +52,7 @@ export default async function handler(
     }
   } catch (err) {
     console.log("Error while messaging: ", err);
-    res.status(500).end(err);
+    // res.status(500).end(err);
+    throw new Error(err);
   }
 }
