@@ -50,6 +50,8 @@ const AddCredential: React.FC<{}> = () => {
       setProviderModalOpen(false);
       setVerificationModalOpen(true);
     }
+
+    console.log('version: ', 1);
   }, [_schemaId, _veridaDid]);
 
   const checkZkAvailable = async (schema: Schema) => {

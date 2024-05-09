@@ -30,7 +30,7 @@ export default async function handler(
       
       console.log('credentials: ', credentials);
 
-      // Change directory for temp files
+      // Change directory for temp files-tmp
       process.chdir('tmp');
       console.log("directory has successfully been changed");
 
@@ -52,6 +52,6 @@ export default async function handler(
     }
   } catch (err) {
     console.log("Error while messaging: ", err);
-    res.status(500).json(err);
+    res.status(500).end(err);
   }
 }
