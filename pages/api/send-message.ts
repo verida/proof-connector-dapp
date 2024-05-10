@@ -31,8 +31,6 @@ export default async function handler(
       console.log('credentials: ', credentials);
 
       // Change directory for temp files-tmp
-      // process.chdir('tmp');
-      console.log("directory has successfully been changed");
 
       const result = await sendMessage(
         context,

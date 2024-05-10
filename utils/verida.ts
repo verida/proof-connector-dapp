@@ -78,8 +78,6 @@ import {
     const PK = `0x${process.env.PRIVATE_KEY}`;
     const VERIDA_SEED = process.env.VERIDA_SEED;
     
-    // TODO This should be removed in prod version. This is for just testing purpose.
-    console.log('verida_seed: ', VERIDA_SEED);
     // Configuration for the DID client
     // `privateKey` must be a Polygon private key that has enough
     // MATIC to perform a blockchain transaction to create your DID
