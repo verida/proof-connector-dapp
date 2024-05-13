@@ -46,6 +46,10 @@ async function sendMessage(
     {
       delay: 100,
       maxTry: 5,
+      onMaxRetryFunc(err) {
+        console.error("Error_Send_Message: ", err);
+        throw new Error(JSON.stringify(err));
+      },
     }
   );
 
