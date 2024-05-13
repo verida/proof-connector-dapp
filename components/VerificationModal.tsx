@@ -135,14 +135,23 @@ const VerificationModal: React.FC<Props> = ({
                 </p>
               )}
               {msgStatus == Status.Processing && (
-                <p className="text-[#6B7280] text-center w-full text-[14px ]">
-                  Sending proof to verida wallet
-                </p>
+                <div className="w-full flex flex-col items-center">
+                  <p className="text-[#6B7280] text-center w-full text-[14px ]">
+                    Sending proof to verida wallet
+                  </p>
+                  <span className="text-[12px] text-[#6B7280]">
+                    It will take 15 ~ 20 seconds to complete.
+                  </span>
+                </div>
               )}
             </>
           ) : (
             !(zkStatus == Status.Success && msgStatus == Status.Success) && (
-              <ModalButton onClick={handleBtnClick} title={btnTxt} disabled={!enabled} />
+              <ModalButton
+                onClick={handleBtnClick}
+                title={btnTxt}
+                disabled={!enabled}
+              />
             )
           )}
         </div>
