@@ -3,6 +3,7 @@ import TransgateConnect from "@zkpass/transgate-js-sdk";
 import { ZKPASS_APP_ID } from "../config/config";
 import { useState } from "react";
 import { Schema, ZkPassResult } from "../@types";
+import { retryAsync } from "ts-retry";
 
 export const Status = {
   None: 0,
@@ -26,21 +27,30 @@ async function processZK(schemaId: string): Promise<ZkPassResult> {
   }
 }
 
-async function sendMessage(veridaDid: string, msg: ZkPassResult, schema: Schema) {
-  const res = await fetch("/api/send-message", {
-    method: "POST",
-    body: JSON.stringify({
-      msg,
-      veridaDid,
-      schema
-    }),
-  });
+async function sendMessage(
+  veridaDid: string,
+  msg: ZkPassResult,
+  schema: Schema
+) {
+  const res = await retryAsync(
+    async () => {
+      await fetch("/api/send-message", {
+        method: "POST",
+        body: JSON.stringify({
+          msg,
+          veridaDid,
+          schema,
+        }),
+      });
+    },
+    {
+      delay: 100,
+      maxTry: 5,
+    }
+  );
 
-  if (res.status === 200) {
-    return res;
-  } else {
-    throw new Error(`Verida Message Error - ${JSON.stringify(await res.json())}`);
-  }
+  console.log("retry_async_send_message: ", res);
+  return res;
 }
 
 export const useZkPass = () => {
@@ -64,11 +74,15 @@ export const useZkPass = () => {
     if (msg) {
       try {
         setMsgStatus(Status.Processing);
-        await sendMessage(veridaDid, {
-          ...msg,
-          zkPassSchemaId: schema.id,
-          zkPassSchemaLabel: schema.title || "No label",
-        }, schema);
+        await sendMessage(
+          veridaDid,
+          {
+            ...msg,
+            zkPassSchemaId: schema.id,
+            zkPassSchemaLabel: schema.title || "No label",
+          },
+          schema
+        );
         setMsgStatus(Status.Success);
       } catch (err) {
         console.log("Verida Message error: ", err);
