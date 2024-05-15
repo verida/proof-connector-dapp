@@ -7,6 +7,7 @@ import { Sora } from "next/font/google";
 import { Status } from "../hooks/useZkPass";
 import { useEffect, useState } from "react";
 import { Schema } from "../@types";
+import { checkZkTransgateAvailable } from "../utils";
 
 const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 
@@ -29,6 +30,10 @@ const VerificationModal: React.FC<Props> = ({
   enabled,
 }) => {
   const [btnTxt, setBtnTxt] = useState("");
+  const [zkTrangateEnabled, setZKTrangateEnabled] = useState<boolean>(false);
+  const [verificationEnabled, setVerificationEnabled] =
+    useState<boolean>(false);
+
   useEffect(() => {
     if (zkStatus == Status.None || msgStatus == Status.None) {
       setBtnTxt("Start Verification");
@@ -40,6 +45,24 @@ const VerificationModal: React.FC<Props> = ({
       setBtnTxt("Start Verification");
     }
   }, [zkStatus, msgStatus]);
+
+  useEffect(() => {
+    (async () => {
+      if (!schema) return;
+      if (schema.src != "zkPass") return;
+      setZKTrangateEnabled(await checkZkTransgateAvailable(schema));
+    })();
+  }, [schema]);
+
+  useEffect(() => {
+    if (!schema) return;
+    if (schema.src === "zkPass") {
+      setVerificationEnabled(enabled && zkTrangateEnabled);
+    } else {
+      setVerificationEnabled(enabled);
+    }
+  }, [enabled, zkTrangateEnabled, schema]);
+
   return (
     <div
       className={cx(
@@ -122,6 +145,19 @@ const VerificationModal: React.FC<Props> = ({
             </p>
           </>
         )}
+        {!zkTrangateEnabled && schema.src === "zkPass" && (
+          <p className="text-[#444] text-center w-full text-[12px]">
+            You need to install{" "}
+            <a
+              href="https://chromewebstore.google.com/detail/zkpass-transgate/afkoofjocpbclhnldmmaphappihehpma"
+              target="_blank"
+              className="text-[#6062fc] underline"
+            >
+              zkPass TransGate extension
+            </a>
+            .
+          </p>
+        )}
         <div className="space-y-10 modal-footer">
           {zkStatus == Status.Processing || msgStatus == Status.Processing ? (
             <>
@@ -150,7 +186,7 @@ const VerificationModal: React.FC<Props> = ({
               <ModalButton
                 onClick={handleBtnClick}
                 title={btnTxt}
-                disabled={!enabled}
+                disabled={!verificationEnabled}
               />
             )
           )}

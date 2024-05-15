@@ -1,15 +1,14 @@
 "use client";
-import { Status, useZkPass } from "../hooks/useZkPass";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useZkPass } from "../hooks/useZkPass";
+import { useCallback, useEffect, useState } from "react";
 import { schemas } from "../config/providers";
 import { useRouter } from "next/router";
-import TransgateConnect from "@zkpass/transgate-js-sdk";
-import { ZKPASS_APP_ID } from "../config/config";
 import { Sora } from "next/font/google";
 import VerificationModal from "../components/VerificationModal";
 import { ProviderSelectionModal } from "../components/ProviderSelectionModal";
 import { Schema } from "../@types";
 import { useReclaim } from "../hooks/useReclaim";
+import { checkZkTransgateAvailable } from "../utils";
 
 const sora = Sora({ subsets: ["latin"], weight: ["400", "500"] });
 
@@ -51,36 +50,22 @@ const AddCredential: React.FC<{}> = () => {
       setVerificationModalOpen(true);
     }
 
-    console.log('version: ', 2);
+    console.log("version: ", 2);
   }, [_schemaId, _veridaDid]);
 
-  const checkZkAvailable = async (schema: Schema) => {
-    if (!schema) return;
-    if (schema.src === "zkPass") {
-      const connector = new TransgateConnect(ZKPASS_APP_ID);
-      // Check if the TransGate extension is installed
-      // If it returns false, please prompt to install it from chrome web store
-      const isAvailable = await connector.isTransgateAvailable();
-      return isAvailable;
-    } else {
-      return requestUrl ? true : false;
-    }
-  };
-
   const handleClick = useCallback(
-    (schema: Schema, veridaDid: string) => {
+    async (schema: Schema, veridaDid: string) => {
       if (!schema || !veridaDid) {
         alert("SchemaId or VeridaDid is missing");
         return;
       }
 
-      if (!checkZkAvailable(schema)) {
-        if (schema.src === "zkPass") {
-          alert("You need to install TransGate extension");
-          return;
-        } else {
-          if (!requestUrl) return;
-        }
+      if (
+        schema.src === "zkPass" &&
+        !(await checkZkTransgateAvailable(schema))
+      ) {
+        console.log("TransGate extension is not installed");
+        return;
       }
 
       if (schema.src === "zkPass") {
