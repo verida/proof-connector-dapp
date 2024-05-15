@@ -47,15 +47,10 @@ export const ProviderSelectionModal = ({
         sora.className
       )}
     >
-      <div className="absolute inset-0" onClick={() => onClose()} />
+      <div className="absolute inset-0"/>
       <div className="relative z-10 w-full max-w-md space-y-4 rounded-xl bg-white p-4">
         <div className="modal-header flex justify-between w-full">
           <h3 className="text-[20px]">Add Credential</h3>
-          <Icon
-            icon={"iconoir:xmark"}
-            className="text-[24px] cursor-pointer"
-            onClick={() => onClose()}
-          />
         </div>
         <div className="modal-body text-center">
           <div className="relative w-full mb-2 rounded-md border-[1px] overflow-hidden">

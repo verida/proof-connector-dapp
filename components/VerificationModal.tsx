@@ -73,7 +73,7 @@ const VerificationModal: React.FC<Props> = ({
         sora.className
       )}
     >
-      <div className="absolute inset-0" onClick={() => onClose()} />
+      <div className="absolute inset-0"/>
       <div className="relative z-10 w-full max-w-md space-y-4 rounded-xl bg-white p-4">
         <div className="modal-header flex justify-between w-full">
           <Icon
