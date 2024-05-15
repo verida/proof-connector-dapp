@@ -109,11 +109,11 @@ const VerificationModal: React.FC<Props> = ({
             {schema.description}
           </p>
           <div className="description text-[#6B7280] flex justify-between mt-7 text-[12px]">
-            <span className="">Type of credentials:</span>
+            <span className="">Type of credential:</span>
             <span className="text-black">{schema.type}</span>
           </div>
           <div className="description text-[#6B7280] flex justify-between mt-2 text-[12px]">
-            <span className="">Type of proof:</span>
+            <span className="">Source of proof:</span>
             <div className="flex items-center">
               <img
                 src={`/imgs/${
