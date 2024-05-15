@@ -1,7 +1,9 @@
 import Web3 from "web3";
 import { VeridaCredentialRecord } from "@verida/verifiable-credentials";
-import { ZkPassResult } from "../@types";
+import { Schema, ZkPassResult } from "../@types";
 import { Proof, Reclaim } from "@reclaimprotocol/js-sdk";
+import TransgateConnect from "@zkpass/transgate-js-sdk";
+import { ZKPASS_APP_ID } from "../config/config";
 
 const web3 = new Web3();
 export const verifyZKProof = (proof: VeridaCredentialRecord): boolean => {
@@ -16,7 +18,7 @@ export const verifyZKProof = (proof: VeridaCredentialRecord): boolean => {
       publicFields,
       publicFieldsHash,
       validatorSignature,
-      allocatorAddress
+      allocatorAddress,
     } = credentialData as ZkPassResult;
 
     // verify allocator signature
@@ -76,8 +78,7 @@ export const verifyReclaimProof = async (
     // verify metadata
     // TODO We don't need other business logic with this proof for now
     // If we need another functionality, then we will need to do something to verify specific fiels here
-    const { claimData } =
-      credentialData as unknown as Proof;
+    const { claimData } = credentialData as unknown as Proof;
     if (!claimData?.provider) {
       return false;
     }
@@ -87,4 +88,13 @@ export const verifyReclaimProof = async (
     console.log("something went wrong while verify result from reclaim: ", err);
     return false;
   }
+};
+
+export const checkZkTransgateAvailable = async (schema: Schema): Promise<boolean> => {
+  if (!schema || schema.src !== "zkPass") return;
+  const connector = new TransgateConnect(ZKPASS_APP_ID);
+  // Check if the TransGate extension is installed
+  // If it returns false, please prompt to install it from chrome web store
+  const isAvailable = await connector.isTransgateAvailable();
+  return isAvailable;
 };
