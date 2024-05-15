@@ -11,6 +11,7 @@ export type Schema = {
   icon: string;
   type: string;
   description: string;
+  message: string;
   src: "zkPass" | "reclaim";
 };
 
