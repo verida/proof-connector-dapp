@@ -43,8 +43,8 @@ import {
     console.log("formated_data: ", credentialData);
     const name =
       schema.src === "zkPass"
-        ? `zkPass credentials: ${schema.host}`
-        : `reclaim credentials: ${schema.host}`;
+        ? `zkPass proof: ${schema.message}`
+        : `reclaim proof: ${schema.message}`;
     try {
       const credentialRecord =
         await credentialSDK.createVerifiableCredentialRecord(

@@ -30,7 +30,7 @@ export default async function handler(
         return;
       }
 
-      const message = `New Credential Proof: ${(schema as Schema).host}`;
+      const message = `New Credential Proof: ${(schema as Schema).message}`;
 
       console.log("credentials: ", credentials);
 
