@@ -112,8 +112,12 @@ const AddCredential: React.FC<{}> = () => {
           schema={schema}
           zkStatus={schema.src === "zkPass" ? zkStatus : reclaimZkStatus}
           msgStatus={schema.src === "zkPass" ? msgStatus : reclaimMsgStatus}
+          did={veridaDid}
           enabled={
-            schema.src === "zkPass" || (schema.src == "reclaim" && !!requestUrl)
+            schema &&
+            veridaDid &&
+            (schema.src === "zkPass" ||
+              (schema.src == "reclaim" && !!requestUrl))
           }
         />
       )}

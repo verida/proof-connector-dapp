@@ -19,6 +19,7 @@ interface Props {
   zkStatus: number;
   msgStatus: number;
   enabled: boolean;
+  did: string;
 }
 const VerificationModal: React.FC<Props> = ({
   isOpen,
@@ -28,6 +29,7 @@ const VerificationModal: React.FC<Props> = ({
   zkStatus,
   msgStatus,
   enabled,
+  did,
 }) => {
   const [btnTxt, setBtnTxt] = useState("");
   const [zkTrangateEnabled, setZKTrangateEnabled] = useState<boolean>(false);
@@ -73,7 +75,7 @@ const VerificationModal: React.FC<Props> = ({
         sora.className
       )}
     >
-      <div className="absolute inset-0"/>
+      <div className="absolute inset-0" />
       <div className="relative z-10 w-full max-w-md space-y-4 rounded-xl bg-white p-4">
         <div className="modal-header flex justify-between w-full">
           <Icon
@@ -154,6 +156,24 @@ const VerificationModal: React.FC<Props> = ({
               className="text-[#6062fc] underline"
             >
               zkPass TransGate extension
+            </a>
+            .
+          </p>
+        )}
+        {!schema && (
+          <p className="text-[#444] text-center w-full text-[12px]">
+            Please select schema first.
+          </p>
+        )}
+        {!did && (
+          <p className="text-[#444] text-center w-full text-[12px]">
+            VeridaDid is not set in
+            <a
+              href="https://prove.verida.network/add-credential?schamaId=ef39adb26c88439591279e25e7856b61&veridaDid=did:vda:mainnet:0x378E209c8Cdc071b1ad7d0b4aBE300309A7bE541"
+              className="text-[#003cff] mx-1"
+              target="_blank"
+            >
+              url
             </a>
             .
           </p>
