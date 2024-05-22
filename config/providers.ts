@@ -15,7 +15,7 @@ export const schemas: Schema[] = [
     title: "Verify ownership of your Uber account",
     host: "Uber",
     icon: "uber.png",
-    type: "KYC",
+    type: "KYC Proof",
     description: "Verify ownership of your Uber account",
     message: "Uber account ownership",
     src: "zkPass",
@@ -36,7 +36,7 @@ export const schemas: Schema[] = [
     description: "Verify ownership of your Uber account",
     host: "Uber",
     icon: "uber.png",
-    type: "KYC",
+    type: "KYC Proof",
     message: "Uber account ownership",
     src: "reclaim",
   },
@@ -46,7 +46,7 @@ export const schemas: Schema[] = [
     description: "Verify ownership of your Kaggle account",
     host: "Kaggle",
     icon: "kaggle.png",
-    type: "KYC",
+    type: "KYC Proof",
     message: "Kaggle account ownership",
     src: "reclaim",
   },
@@ -57,7 +57,7 @@ export const schemas: Schema[] = [
     message: "Binance account KYC verification",
     host: "Binance",
     icon: "binance.png",
-    type: "KYC",
+    type: "KYC Proof",
     src: "zkPass",
   },
   {
@@ -67,7 +67,7 @@ export const schemas: Schema[] = [
     message: "Bybit account KYC verification",
     host: "Bybit",
     icon: "bybit.png",
-    type: "KYC",
+    type: "KYC Proof",
     src: "zkPass",
   },
   {
@@ -77,7 +77,7 @@ export const schemas: Schema[] = [
     message: "Kucoin account KYC verification",
     host: "KuCoin",
     icon: "kucoin.png",
-    type: "KYC",
+    type: "KYC Proof",
     src: "zkPass",
   },
   {
@@ -87,7 +87,7 @@ export const schemas: Schema[] = [
     message: "MEXC account KYC verification",
     host: "MEXC",
     icon: "mexc.png",
-    type: "KYC",
+    type: "KYC Proof",
     src: "zkPass",
   },
   {
@@ -97,7 +97,7 @@ export const schemas: Schema[] = [
     message: "Gate account KYC verification",
     host: "Gate",
     icon: "gate.png",
-    type: "KYC",
+    type: "KYC Proof",
     src: "zkPass",
   },
 
@@ -108,7 +108,7 @@ export const schemas: Schema[] = [
     message: "Binance account ownership",
     host: "Binance",
     icon: "binance.png",
-    type: "Ownership",
+    type: "Ownership Proof",
     src: "zkPass",
   },
   {
@@ -118,7 +118,7 @@ export const schemas: Schema[] = [
     message: "Bybit account ownership",
     host: "Bybit",
     icon: "bybit.png",
-    type: "Ownership",
+    type: "Ownership Proof",
     src: "zkPass",
   },
   {
@@ -128,7 +128,7 @@ export const schemas: Schema[] = [
     message: "MEXC account ownership",
     host: "MEXC",
     icon: "mexc.png",
-    type: "Ownership",
+    type: "Ownership Proof",
     src: "zkPass",
   },
   {
@@ -138,7 +138,7 @@ export const schemas: Schema[] = [
     message: "Gate account ownership",
     host: "Gate",
     icon: "gate.png",
-    type: "Ownership",
+    type: "Ownership Proof",
     src: "zkPass",
   },
   {
@@ -148,7 +148,7 @@ export const schemas: Schema[] = [
     message: "Kucoin account ownership",
     host: "KuCoin",
     icon: "kucoin.png",
-    type: "Ownership",
+    type: "Ownership Proof",
     src: "zkPass",
   },
 ];
