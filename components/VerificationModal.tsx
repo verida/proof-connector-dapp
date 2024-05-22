@@ -136,7 +136,7 @@ const VerificationModal: React.FC<Props> = ({
             />
             <p className="text-[#6B7280] text-center w-full text-[14px ]">
               Verification is now complete. Please check your Verida Wallet
-              Inbox.
+              inbox.
             </p>
           </>
         )}
@@ -193,10 +193,10 @@ const VerificationModal: React.FC<Props> = ({
               {msgStatus == Status.Processing && (
                 <div className="w-full flex flex-col items-center">
                   <p className="text-[#6B7280] text-center w-full text-[14px ]">
-                    Sending proof to verida wallet
+                    Sending proof to your Verida Wallet
                   </p>
                   <span className="text-[12px] text-[#6B7280]">
-                    It will take 15 ~ 20 seconds to complete.
+                    This will take 15 ~ 20 seconds to complete.
                   </span>
                 </div>
               )}
