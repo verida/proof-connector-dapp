@@ -91,7 +91,7 @@ export const schemas: Schema[] = [
     src: "zkPass",
   },
   {
-    id: "8dd0e65d44c74ff8a405bc5a35e68387",
+    id: "cada76adb71f4de6be8748a4ab17b074",
     title: "Verify KYC level of your Gate account",
     description: "Verify KYC level of your Gate account",
     message: "Gate account KYC verification",
